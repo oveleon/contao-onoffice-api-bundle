@@ -1,0 +1,40 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_regions.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_regions.importConfirm">
+        <source>Note that the previous dataset is completely emptied and changes made in the system expire.</source>
+        <target>Beachten Sie, dass der bisherige Datenbestand komplett geleert wird und im System vorgenommene Änderungen verfallen.</target>
+      </trans-unit>
+      <trans-unit id="tl_regions.errNoLanguage">
+        <source>Please enter a valid language abbreviation in order to start the import.</source>
+        <target>Bitte geben Sie ein gültiges Sprachkürzel an um den Import zu starten.</target>
+      </trans-unit>
+      <trans-unit id="tl_regions.importComplete">
+        <source>The import was carried out successfully.</source>
+        <target>Der Import wurde erfolgreich durchgeführt.</target>
+      </trans-unit>
+      <trans-unit id="tl_regions.emptyRecords">
+        <source>No regions were returned by onOffice.</source>
+        <target>Es wurden keine Regionen von onOffice zurückgeliefert.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_regions.language.0">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="tl_regions.language.1">
+        <source>Please enter the language abbreviation as expected by onOffice. (s. https://apidoc.onoffice.de/index.php/actions/informationen-abfragen/regionen/)</source>
+        <target>Bitte geben Sie hier das Spachkürzel wie von onOffice erwartet an. (s. https://apidoc.onoffice.de/index.php/actions/informationen-abfragen/regionen/).</target>
+      </trans-unit>
+
+      <trans-unit id="tl_regions.importRegions.0">
+        <source>Import regions</source>
+        <target>Regionen importieren</target>
+      </trans-unit>
+      <trans-unit id="tl_regions.importRegions.1">
+        <source>Import regions</source>
+        <target>Regionen importieren</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

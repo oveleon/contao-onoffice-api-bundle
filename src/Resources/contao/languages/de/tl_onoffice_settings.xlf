@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_onoffice_settings.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_onoffice_settings.api_authentication_legend">
+        <source>API Zugangsdaten</source>
+        <target>API access data</target>
+      </trans-unit>
+
+      <trans-unit id="tl_onoffice_settings.onOfficeApiSecret.0">
+        <source>API-Secret</source>
+        <target>API-Secret</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_settings.onOfficeApiSecret.1">
+        <source>Geben Sie hier den Secret-Token Ihrer API-Schnittstelle an</source>
+        <target>Geben Sie hier den Secret-Token Ihrer API-Schnittstelle an</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_settings.onOfficeApiToken.0">
+        <source>API-Token</source>
+        <target>API-Token</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_settings.onOfficeApiToken.1">
+        <source>Geben Sie hier den Token Ihrer API-Schnittstelle an</source>
+        <target>Geben Sie hier den Token Ihrer API-Schnittstelle an</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_settings.onOfficeApiVersion.0">
+        <source>Version</source>
+        <target>Version</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_settings.onOfficeApiVersion.1">
+        <source>Bitte geben Sie die zu verwendede API-Version an. Standard / leer: 'latest'</source>
+        <target>Bitte geben Sie die zu verwendede API-Version an. Standard / leer: 'latest'</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

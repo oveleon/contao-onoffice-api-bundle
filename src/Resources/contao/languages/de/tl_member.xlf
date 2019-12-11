@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_member.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_member.onOfficeGroup.0">
+        <source>Assigned onOffice-group</source>
+        <target>Zugewiesene onOffice-Gruppe</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeGroup.1">
+        <source>Here you can assign a specific onOffice group to the member.</source>
+        <target>Hier können Sie das Mitglied einer speziellen onOffice-Gruppe zuweisen.</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeBranchGroup.0">
+        <source>Assigned branch group / office group</source>
+        <target>Zugewiesene Standortgruppe / Bürogruppe</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeBranchGroup.1">
+        <source>Here you can assign a specific branch group to the member.</source>
+        <target>Hier können Sie das Mitglied einer speziellen Standortgruppe zuweisen.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

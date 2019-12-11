@@ -1,0 +1,296 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_onoffice_api_view.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_onoffice_api_view.type.0">
+        <source>onOffice Module</source>
+        <target>onOffice Modul</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.type.1">
+        <source>Please choose the onOffice module.</source>
+        <target>Bitte wählen wählen Sie ein onOffice Moduls.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.title.0">
+        <source>Title</source>
+        <target>Titel</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.title.1">
+        <source>Please enter the view title.</source>
+        <target>Bitte geben Sie den Titel der Ansicht ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.alias.0">
+        <source>alias</source>
+        <target>Alias</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.alias.1">
+        <source>The event alias is a unique reference and can be used for an api request.</source>
+        <target>Der Alias ist eine eindeutige Referenz, die für eine API Abfrage genutzt werden kann.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.data.0">
+        <source>Fields</source>
+        <target>Felder</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.data.1">
+        <source>Please select the fields should be used in the response.</source>
+        <target>Bitte wählen Sie Felder aus, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.categories.0">
+        <source>Picture categories</source>
+        <target>Bildkategorien</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.categories.1">
+        <source>Please select image categories which should be used in the response.</source>
+        <target>Bitte wählen Sie Bildkategorien aus, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.recordids.0">
+        <source>Record IDs</source>
+        <target>Datensatz-IDs</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.recordids.1">
+        <source>Please enter records ids which should be used in the response.</source>
+        <target>Bitte geben Sie Datensatz IDs an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateids.0">
+        <source>Esate IDs</source>
+        <target>Immobilien-IDs</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateids.1">
+        <source>Please enter estate ids which should be used in the response.</source>
+        <target>Bitte geben Sie Immobilien IDs an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.filter.0">
+        <source>Filter</source>
+        <target>Filter</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.filter.1">
+        <source>Please enter filter which should be used in the response.</source>
+        <target>Bitte geben Sie Filter an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.sortby.0">
+        <source>Order</source>
+        <target>Reihenfolge</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.sortby.1">
+        <source>Please enter order information which should be used in the response.</source>
+        <target>Bitte geben Sie die Reihenfolge an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.filterid.0">
+        <source>Filter id</source>
+        <target>Filter-ID</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.filterid.1">
+        <source>Please enter the filter id which should be used in the response.</source>
+        <target>Bitte geben Sie die Filter-ID an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateid.0">
+        <source>Estate id</source>
+        <target>Immobilien-ID</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateid.1">
+        <source>Please enter the estate id that should be used in the response.</source>
+        <target>Bitte geben Sie die Immobilien-ID an, die bei der Abfrage berücksichtigt werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.listlimit.0">
+        <source>Limit</source>
+        <target>Limit</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.listlimit.1">
+        <source>Please enter the record limit.</source>
+        <target>Bitte geben Sie das Abfragelimit an.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.listoffset.0">
+        <source>Record offset</source>
+        <target>Datensätze überspringen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.listoffset.1">
+        <source>Please enter the offset.</source>
+        <target>Bitte geben Sie an, wie viele Datensätze übersprungen werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.formatoutput.0">
+        <source>Format output</source>
+        <target>Ausgabe formatieren</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.formatoutput.1">
+        <source>Please select this option if the response should be formatted.</source>
+        <target>Bitte geben Sie an, ob das Ergebnis formatiert werden soll.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.addContactPerson.0">
+        <source>Add contact person</source>
+        <target>Ansprechpartner ergänzen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.addContactPerson.1">
+        <source>Resolve and supplement contact persons during request.</source>
+        <target>Ansprechpartner während der Abfrage auflösen und ergänzen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estatelanguage.0">
+        <source>Estate language</source>
+        <target>Sprache der Immobilien</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estatelanguage.1">
+        <source>Please enter the language for the estate request.</source>
+        <target>Bitte geben Sie die Sprache für die Immobilien-Abfrage an.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.outputlanguage.0">
+        <source>Output language</source>
+        <target>Sprache der Ausgabe</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.outputlanguage.1">
+        <source>Please enter the language for the request.</source>
+        <target>Bitte geben Sie die Sprache für die Abfrage an.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.language.0">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.language.1">
+        <source>Please enter the language for the request.</source>
+        <target>Bitte geben Sie die Sprache für die Abfrage an.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.tracking.0">
+        <source>Tracking</source>
+        <target>Nachverfolgung</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.tracking.1">
+        <source>Please specify whether the ID of the parent record should be output.</source>
+        <target>Bitte geben Sie an, ob die ID des Elterndatensatzes ausgeben werden soll.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.size.0">
+        <source>Picture size</source>
+        <target>Bildgröße</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.size.1">
+        <source>Please specify the picture size.</source>
+        <target>Bitte geben Sie die Bildgröße an.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.onOfficeGroup.0">
+        <source>Assigned onOffice group</source>
+        <target>Zugeordnete onOffice-Gruppe</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.onOfficeGroup.1">
+        <source>Show the api view to certain onOffice member groups only.</source>
+        <target>Die API-Ansicht nur einer bestimmten onOffice Gruppe anzeigen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.protected.0">
+        <source>Protect api view</source>
+        <target>API-Ansicht schützen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.protected.1">
+        <source>Show the api view to certain member groups only.</source>
+        <target>Die API-Ansicht nur bestimmten Gruppen anzeigen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.groups.0">
+        <source>Allowed member groups</source>
+        <target>Erlaubte Mitgliedergruppen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.groups.1">
+        <source>These groups will be able to see the api view.</source>
+        <target>Diese Gruppen können die API-Ansicht sehen.</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.published.0">
+        <source>Publish view</source>
+        <target>Ansicht veröffentlichen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.published.1">
+        <source>Publish the view.</source>
+        <target>Die Ansicht veröffentlichen.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_onoffice_api_view.type_legend">
+        <source>Module type</source>
+        <target>Modultyp</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.title_legend">
+        <source>Title</source>
+        <target>Titel</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.data_legend">
+        <source>Fields</source>
+        <target>Felder</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.filter_legend">
+        <source>Filter</source>
+        <target>Filter</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.sortby_legend">
+        <source>Order</source>
+        <target>Reihenfolge</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.limit_offset_legend">
+        <source>Limits</source>
+        <target>Limitierungen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateids_legend">
+        <source>Estate IDs</source>
+        <target>Immobilien-IDs</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.estateid_legend">
+        <source>Estate ID</source>
+        <target>Immobilien-ID</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.recordids_legend">
+        <source>Record IDs</source>
+        <target>Datensatz-IDs</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.categories_legend">
+        <source>Image categories</source>
+        <target>Bildkategorien</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.language_legend">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.expert_legend">
+        <source>Expert settings</source>
+        <target>Experten-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.protected_legend">
+        <source>Access protection</source>
+        <target>Zugriffsschutz</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.publish_legend">
+        <source>Publish</source>
+        <target>Veröffentlichen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_onoffice_api_view.new.0">
+        <source>New view</source>
+        <target>Neue Ansicht</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.new.1">
+        <source>Create a new view</source>
+        <target>Eine neue Ansicht erstellen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.show.0">
+        <source>View details</source>
+        <target>Ansichtendetails</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.show.1">
+        <source>Show the details of view ID %s</source>
+        <target>Details der Ansicht ID %s anzeigen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.edit.0">
+        <source>Edit view</source>
+        <target>Ansicht bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.edit.1">
+        <source>Edit view ID %s</source>
+        <target>Ansicht ID %s bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.copy.0">
+        <source>Duplicate view</source>
+        <target>Ansicht duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.copy.1">
+        <source>Duplicate view ID %s</source>
+        <target>Ansicht ID %s duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.delete.0">
+        <source>Delete view</source>
+        <target>Ansicht löschen</target>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_api_view.delete.1">
+        <source>Delete view ID %s</source>
+        <target>Ansicht ID %s löschen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

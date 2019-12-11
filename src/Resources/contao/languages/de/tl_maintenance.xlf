@@ -1,0 +1,14 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_maintenance.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_maintenance_jobs.estatepictures.0">
+        <source>Purge the onOffice image cache</source>
+        <target>onOffice Bildercache leeren</target>
+      </trans-unit>
+      <trans-unit id="tl_maintenance_jobs.estatepictures.1">
+        <source>Removes the automatically generated images, which are stored by the onOffice api.</source>
+        <target>Löscht die automatisch erstellten Bilder, die durch die onOffice API zwischengespeichert werden.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,42 @@
+onoffice_api_read:
+  path: /api/onoffice/v{version}/{module}/{id}
+  defaults:
+    _controller: "ContaoOnofficeApiBundle:OnOffice:read"
+    _scope: frontend
+    _token_check: false
+    id: null
+  requirements:
+    version: '\d+'
+  methods: [GET]
+
+onoffice_api_edit:
+  path: /api/onoffice/v{version}/{module}/{id}/edit
+  defaults:
+    _controller: "ContaoOnofficeApiBundle:OnOffice:edit"
+    _scope: frontend
+    _token_check: false
+  requirements:
+    version: '\d+'
+    id: '\d+'
+  methods: [POST]
+
+onoffice_api_upload:
+  path: /api/onoffice/v{version}/{module}/{id}/upload
+  defaults:
+    _controller: "ContaoOnofficeApiBundle:OnOffice:upload"
+    _scope: frontend
+    _token_check: false
+  requirements:
+    version: '\d+'
+    id: '\d+'
+  methods: [POST]
+
+onoffice_api_create:
+  path: /api/onoffice/v{version}/{module}/create
+  defaults:
+    _controller: "ContaoOnofficeApiBundle:OnOffice:create"
+    _scope: frontend
+    _token_check: false
+  requirements:
+    version: '\d+'
+  methods: [POST]

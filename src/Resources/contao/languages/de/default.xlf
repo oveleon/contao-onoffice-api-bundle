@@ -1,0 +1,10 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/default.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="ERR.onOfficeBranchGroupMandatoryRequired">
+        <source>The group is still used by one or more members as a location group. Please assign other location groups to the members if they no longer function as such.</source>
+        <target>Die Gruppe wird noch von ein oder mehreren Mitgliedern als Standortgruppe verwendet. Bitte weisen Sie den Mitgliedern andere Standortgruppen zu, sollte diese nicht mehr als solche fungieren.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
