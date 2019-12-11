@@ -5,7 +5,7 @@ namespace Oveleon\ContaoOnofficeApiBundle;
 use Contao\MemberGroupModel;
 use onOffice\SDK\onOfficeSDK;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Oveleon\OnOfficeApi\ApiHandler;
+use Oveleon\OnOfficeSDK\ApiHandler;
 
 /**
  * onOffice read api controller.

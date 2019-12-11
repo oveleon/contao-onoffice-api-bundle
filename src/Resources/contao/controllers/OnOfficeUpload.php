@@ -4,7 +4,7 @@ namespace Oveleon\ContaoOnofficeApiBundle;
 
 use onOffice\SDK\onOfficeSDK;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Oveleon\OnOfficeApi\ApiHandler;
+use Oveleon\OnOfficeSDK\ApiHandler;
 
 /**
  * onOffice upload file api controller.

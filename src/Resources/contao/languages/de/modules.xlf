@@ -21,14 +21,6 @@
         <source>Edit onOffice config</source>
         <target>Die onOffice-Konfiguration bearbeiten</target>
       </trans-unit>
-      <trans-unit id="MOD.onoffice_regions.0">
-        <source>Regions</source>
-        <target>Regionen</target>
-      </trans-unit>
-      <trans-unit id="MOD.onoffice_regions.1">
-        <source>Manage onOffice Regions</source>
-        <target>onOffice Regionen verwalten</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
