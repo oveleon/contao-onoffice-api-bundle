@@ -19,13 +19,6 @@ array_insert($GLOBALS['BE_MOD'], 1, array
         (
             'tables'      => array('tl_onoffice_settings')
         )
-    ),
-    'real_estate' => array
-    (
-        'regions' => array
-        (
-            'importRegions' => array('\\Oveleon\\ContaoOnofficeApiBundle\\Regions', 'setupImport')
-        )
     )
 ));
 
