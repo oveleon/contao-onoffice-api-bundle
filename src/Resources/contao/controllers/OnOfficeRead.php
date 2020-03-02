@@ -234,6 +234,14 @@ class OnOfficeRead extends \Frontend
             case 'searchcriteriafields':
                 $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'searchCriteriaFields', array());
                 break;
+            case 'qualifiedsuitors':
+                $arrValidParam = array('estatedata');
+
+                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+
+                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'qualifiedsuitors', $param);
+
+                break;
             case 'regions':
                 $arrValidParam = array('language');
 
