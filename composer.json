@@ -16,7 +16,7 @@
     "php":">=7.1",
     "contao/core-bundle":"^4.4",
     "oveleon/onoffice-sdk":"^1.0",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.3"
+    "menatwork/contao-multicolumnwizard-bundle": "^3.4"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"
