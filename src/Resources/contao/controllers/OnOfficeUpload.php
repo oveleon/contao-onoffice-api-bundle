@@ -51,7 +51,7 @@ class OnOfficeUpload extends \Frontend
         }
 
         $arrValidParam1 = array('data', 'file');
-        $arrValidParam2 = array('file', 'Art', 'title', 'freetext', 'documentAttribute', 'relatedRecordId', 'estatelanguage', 'language');
+        $arrValidParam2 = array('file', 'Art', 'title', 'freetext', 'documentAttribute', 'relatedRecordId', 'estatelanguage', 'language', 'setDefaultPublicationRights');
 
         $param = $this->getParameters($arrValidParam1);
         $data = $apiHandler->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
