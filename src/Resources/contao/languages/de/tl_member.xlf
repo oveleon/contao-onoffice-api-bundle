@@ -17,6 +17,22 @@
         <source>Here you can assign a specific branch group to the member.</source>
         <target>Hier können Sie das Mitglied einer speziellen Standortgruppe zuweisen.</target>
       </trans-unit>
+      <trans-unit id="tl_member.onOfficeUsername.0">
+        <source>Username</source>
+        <target>Benutzername</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeUsername.1">
+        <source>Enter the onOffice user name here.</source>
+        <target>Geben Sie hier den onOffice-Benutzernamen ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeUserId.0">
+        <source>User-Id</source>
+        <target>User-Id</target>
+      </trans-unit>
+      <trans-unit id="tl_member.onOfficeUserId.1">
+        <source>Enter the onOffice user ID here.</source>
+        <target>Geben Sie hier die onOffice User-Id ein.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

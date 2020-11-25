@@ -9,7 +9,7 @@
 // Extend the default palette
 Contao\CoreBundle\DataContainer\PaletteManipulator::create()
     ->addLegend('onoffice_legend', 'login_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_AFTER)
-    ->addField(array('onOfficeGroup', 'onOfficeBranchGroup'), 'onoffice_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
+    ->addField(array('onOfficeUsername', 'onOfficeUserId', 'onOfficeGroup', 'onOfficeBranchGroup'), 'onoffice_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
     ->applyToPalette('default', 'tl_member')
 ;
 
@@ -33,6 +33,23 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['onOfficeBranchGroup'] = array
     'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
+$GLOBALS['TL_DCA']['tl_member']['fields']['onOfficeUsername'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_member']['onOfficeUsername'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    'sql'                     => "varchar(64) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_member']['fields']['onOfficeUserId'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_member']['onOfficeUserId'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    'sql'                     => "varchar(64) NOT NULL default ''"
+);
 
 $GLOBALS['TL_DCA']['tl_member']['fields']['groups']['options_callback'] = array('tl_member_onoffice', 'getMemberGroups');
 
