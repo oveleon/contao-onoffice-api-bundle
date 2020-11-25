@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['onOfficeUsername'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_member']['onOfficeUsername'],
     'exclude'                 => true,
     'inputType'               => 'text',
-    'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    'eval'                    => array('tl_class'=>'w50'),
     'sql'                     => "varchar(64) NOT NULL default ''"
 );
 
@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['onOfficeUserId'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_member']['onOfficeUserId'],
     'exclude'                 => true,
     'inputType'               => 'text',
-    'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    'eval'                    => array('tl_class'=>'w50'),
     'sql'                     => "varchar(64) NOT NULL default ''"
 );
 
