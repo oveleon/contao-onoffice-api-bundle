@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_member_group.php" source-language="en">
+    <body>
+      <trans-unit id="tl_member_group.onOfficeGroup.0">
+        <source>Assigned onOffice-group</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.onOfficeGroup.1">
+        <source>Here you can assign a specific onOffice group to the member group.</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.onOfficeBranchGroup.0">
+        <source>Branch group / office group</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.onOfficeBranchGroup.1">
+        <source>Currently not in use.</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.filterid.0">
+        <source>Filter id</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.filterid.1">
+        <source>Please enter the filter id which should be used in the response.</source>
+      </trans-unit>
+      <trans-unit id="tl_member_group.onoffice_legend">
+        <source>onOffice</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

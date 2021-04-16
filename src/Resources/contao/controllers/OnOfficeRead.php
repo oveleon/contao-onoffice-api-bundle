@@ -2,10 +2,9 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-use Contao\MemberGroupModel;
 use onOffice\SDK\onOfficeSDK;
+use Contao\MemberGroupModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Oveleon\OnOfficeSDK\ApiHandler;
 
 /**
  * onOffice read api controller.
@@ -13,23 +12,8 @@ use Oveleon\OnOfficeSDK\ApiHandler;
  * @author Fabian Ekert <fabian@oveleon.de>
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class OnOfficeRead extends \Frontend
+class OnOfficeRead extends OnOfficeHandler
 {
-
-    /**
-     * Initialize the object
-     */
-    public function __construct()
-    {
-        // Load the user object before calling the parent constructor
-        $this->import('FrontendUser', 'User');
-        parent::__construct();
-
-        // Check whether a user is logged in
-        \define('BE_USER_LOGGED_IN', $this->getLoginStatus('BE_USER_AUTH'));
-        \define('FE_USER_LOGGED_IN', $this->getLoginStatus('FE_USER_AUTH'));
-    }
-
     /**
      * Run the controller
      *
@@ -37,17 +21,12 @@ class OnOfficeRead extends \Frontend
      * @param int     $id              Id of onOffice module or resource id
      * @param int     $view            Id of onOffice api view
      * @param array   $arrDefaultParam Default params
-     * @param boolean $asArray         Retrun as array flag
+     * @param boolean $asArray         Return as array flag
      *
      * @return JsonResponse|array
      */
-    public function run($module, $id=null, $view=null, $arrDefaultParam=array(), $asArray=false)
+    public function run(string $module, $id=null, $view=null, $arrDefaultParam=array(), $asArray=false)
     {
-        $apiHandler = new ApiHandler();
-
-        $apiHandler->setApiVersion('stable');
-        $apiHandler->setAccessData(\Config::get('onOfficeApiToken'), \Config::get('onOfficeApiSecret'));
-
         if (array_key_exists('view', $_GET))
         {
             $arrDefaultParam = $this->getViewParameters($_GET['view'], $arrDefaultParam);
@@ -94,7 +73,7 @@ class OnOfficeRead extends \Frontend
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
                 $this->setFilterIdByUser($param);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ESTATE, $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ESTATE, $param);
 
                 // Resolve contact persons and update data records
                 if ($addContactPerson)
@@ -107,7 +86,7 @@ class OnOfficeRead extends \Frontend
                         $arrEstateIds[] = $record['id'];
                     }
 
-                    $contactPersons = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'idsfromrelation', array('relationtype'=>onOfficeSDK::RELATION_TYPE_CONTACT_BROKER, 'parentids'=>$arrEstateIds));
+                    $contactPersons = $this->call(onOfficeSDK::ACTION_ID_GET, 'idsfromrelation', array('relationtype'=>onOfficeSDK::RELATION_TYPE_CONTACT_BROKER, 'parentids'=>$arrEstateIds));
 
                     foreach ($contactPersons['data']['records'][0]['elements'] as $id => $contactIds)
                     {
@@ -120,7 +99,7 @@ class OnOfficeRead extends \Frontend
                         }
                     }
 
-                    $addresses = $apiHandler->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, array('recordids'=>$arrContactIds, 'data'=>['Anrede','Email','Name','Vorname','Land','Ort','Plz','Strasse','Telefon1','imageUrl','Kundenlogo','Zusatz1']));
+                    $addresses = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, array('recordids'=>$arrContactIds, 'data'=>['Anrede','Email','Name','Vorname','Land','Ort','Plz','Strasse','Telefon1','imageUrl','Kundenlogo','Zusatz1']));
                     $arrAddresses = array();
 
                     foreach ($addresses['data']['records'] as $address)
@@ -156,7 +135,7 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'estatepictures', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'estatepictures', $param);
 
                 // Store images temporary
                 if (array_key_exists('savetemporary', $_GET) && $_GET['savetemporary'])
@@ -180,7 +159,7 @@ class OnOfficeRead extends \Frontend
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
                 $this->setFilterIdByUser($param);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, $param);
                 break;
             case 'agentslogs':
                 $arrValidParam = array('data', 'tracking', 'estateid', 'listlimit');
@@ -197,7 +176,7 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_READ, 'agentslog', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_READ, 'agentslog', $param);
                 break;
             case 'users':
                 // ToDo
@@ -210,7 +189,7 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_READ, 'user', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_READ, 'user', $param);
                 break;
             case 'fields':
                 $arrValidParam = array('labels', 'language', 'fieldList', 'modules', 'showOnlyInactive');
@@ -222,24 +201,24 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'fields', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'fields', $param);
                 break;
             case 'searchcriterias':
                 $arrValidParam = array('mode', 'ids');
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'searchcriterias', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'searchcriterias', $param);
                 break;
             case 'searchcriteriafields':
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'searchCriteriaFields', array());
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'searchCriteriaFields', array());
                 break;
             case 'qualifiedsuitors':
                 $arrValidParam = array('estatedata');
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'qualifiedsuitors', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'qualifiedsuitors', $param);
 
                 break;
             case 'regions':
@@ -247,7 +226,7 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'regions', $param);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'regions', $param);
                 break;
             case 'search':
                 if(!$id)
@@ -273,7 +252,7 @@ class OnOfficeRead extends \Frontend
 
                 $param = $this->getParameters($arrValidParam, $arrDefaultParam);
 
-                $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'search', $param, $id);
+                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'search', $param, $id);
                 break;
         }
 

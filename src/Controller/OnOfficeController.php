@@ -6,7 +6,8 @@ use Oveleon\ContaoOnofficeApiBundle\OnOfficeEdit;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeUpload;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeCreate;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -16,9 +17,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @author Fabian Ekert <fabian@oveleon.de>
  * @author Daniele Sciannimanica <daniele@oveleon.de>
  */
-class OnOfficeController extends Controller
+class OnOfficeController extends AbstractController
 {
-
     /**
      * Runs the command scheduler. (READ)
      *
