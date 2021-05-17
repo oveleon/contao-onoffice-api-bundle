@@ -13,8 +13,8 @@
     }
   ],
   "require":{
-    "php":">=7.1",
-    "contao/core-bundle":"^4.4",
+    "php":"^7.3 || ^8.0",
+    "contao/core-bundle":"^4.9",
     "onoffice/sdk":"^0.2.0",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4"
   },
@@ -42,7 +42,7 @@
   },
   "extra":{
     "branch-alias": {
-      "dev-master": "1.0.x-dev"
+      "dev-master": "2.0.x-dev"
     },
     "contao-manager-plugin": "Oveleon\\ContaoOnofficeApiBundle\\ContaoManager\\Plugin"
   }
