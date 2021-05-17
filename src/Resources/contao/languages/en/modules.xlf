@@ -1,0 +1,21 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/modules.php" source-language="en">
+    <body>
+      <trans-unit id="MOD.onoffice">
+        <source>onOffice</source>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_api_view.0">
+        <source>API-Views</source>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_api_view.1">
+        <source>Edit onOffice api views</source>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_settings.0">
+        <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_settings.1">
+        <source>Edit onOffice config</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

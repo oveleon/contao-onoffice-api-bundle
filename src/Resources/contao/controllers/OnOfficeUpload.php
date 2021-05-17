@@ -4,30 +4,15 @@ namespace Oveleon\ContaoOnofficeApiBundle;
 
 use onOffice\SDK\onOfficeSDK;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Oveleon\OnOfficeSDK\ApiHandler;
 
 /**
  * onOffice upload file api controller.
  *
  * @author Fabian Ekert <fabian@oveleon.de>
+ * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class OnOfficeUpload extends \Frontend
+class OnOfficeUpload extends OnOfficeHandler
 {
-
-    /**
-     * Initialize the object
-     */
-    public function __construct()
-    {
-        // Load the user object before calling the parent constructor
-        $this->import('FrontendUser', 'User');
-        parent::__construct();
-
-        // Check whether a user is logged in
-        \define('BE_USER_LOGGED_IN', $this->getLoginStatus('BE_USER_AUTH'));
-        \define('FE_USER_LOGGED_IN', $this->getLoginStatus('FE_USER_AUTH'));
-    }
-
     /**
      * Run the controller
      *
@@ -38,11 +23,6 @@ class OnOfficeUpload extends \Frontend
      */
     public function run($module, $id)
     {
-        $apiHandler = new ApiHandler();
-
-        $apiHandler->setApiVersion('stable');
-        $apiHandler->setAccessData(\Config::get('onOfficeApiToken'), \Config::get('onOfficeApiSecret'));
-
         $arrValidModules = array('estates', 'addresses', 'agentslogs');
 
         if (!in_array($module, $arrValidModules))
@@ -54,7 +34,7 @@ class OnOfficeUpload extends \Frontend
         $arrValidParam2 = array('file', 'Art', 'title', 'freetext', 'documentAttribute', 'relatedRecordId', 'estatelanguage', 'language', 'setDefaultPublicationRights');
 
         $param = $this->getParameters($arrValidParam1);
-        $data = $apiHandler->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
+        $data = $this->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
 
         unset($param);
 
@@ -70,7 +50,7 @@ class OnOfficeUpload extends \Frontend
         $param['tmpUploadId'] = $data['data']['records'][0]['elements']['tmpUploadId'];
         $param['relatedRecordId'] = $id;
 
-        $data = $apiHandler->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
+        $data = $this->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
 
         return new JsonResponse($data);
     }
@@ -134,11 +114,6 @@ class OnOfficeUpload extends \Frontend
      */
     private function unsetTitleImageByRealEstateId($ids)
     {
-        $apiHandler = new ApiHandler();
-
-        $apiHandler->setApiVersion('stable');
-        $apiHandler->setAccessData(\Config::get('onOfficeApiToken'), \Config::get('onOfficeApiSecret'));
-
         if(!is_array($ids)){
             $ids = [$ids];
         }
@@ -148,7 +123,7 @@ class OnOfficeUpload extends \Frontend
             'categories' => ['Titelbild'],
         ];
 
-        $data = $apiHandler->call(onOfficeSDK::ACTION_ID_GET, 'estatepictures', $param);
+        $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'estatepictures', $param);
 
         $fileId = $data['data']['records'][0]['id'];
         $info   = $data['data']['records'][0]['elements'][0];
@@ -160,7 +135,7 @@ class OnOfficeUpload extends \Frontend
                 'Art' => 'Foto',
             ];
 
-            $data = $apiHandler->call(onOfficeSDK::ACTION_ID_MODIFY, 'file', $param);
+            $data = $this->call(onOfficeSDK::ACTION_ID_MODIFY, 'file', $param);
         }
 
         return $info;

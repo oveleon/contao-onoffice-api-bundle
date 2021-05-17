@@ -2,13 +2,15 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
+use Contao\Folder;
+use Contao\System;
 
 /**
  * Provide methods to run automated jobs.
  *
  * @author Fabian Ekert <fabian@oveleon.de>
  */
-class OnOfficeAutomator extends \System
+class OnOfficeAutomator extends System
 {
 
 	/**
@@ -24,7 +26,7 @@ class OnOfficeAutomator extends \System
 	 */
 	public function purgeEstatePictureCache()
 	{
-        $objFolder = new \Folder('assets/estatepictures');
+        $objFolder = new Folder('assets/estatepictures');
         $objFolder->purge();
 
 		// Add a log entry
