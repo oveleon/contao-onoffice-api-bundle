@@ -3,7 +3,6 @@
 namespace Oveleon\ContaoOnofficeApiBundle;
 
 use onOffice\SDK\onOfficeSDK;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * onOffice create api controller.
@@ -15,32 +14,35 @@ class OnOfficeCreate extends OnOfficeHandler
     /**
      * Run the controller
      *
-     * @param String $module  Plural name of onOffice module
+     * @param String $strModule  Plural name of onOffice module
+     * @param array  $arrParam   Array of parameters
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function run($module)
+    public function run($strModule, $arrParam=array())
     {
-        switch ($module)
-        {
-            case 'appointment':
-                $param = $this->getParameters();
+        $param = !count($arrParam) ? $this->getParameters() : $arrParam;
 
+        switch ($strModule)
+        {
+            case 'estates':
+                $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'estate', ['data'=>$param]);
+                break;
+            case 'addresses':
+                $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'address', $param);
+                break;
+            case 'appointments':
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'calendar', $param);
                 break;
-            case 'task':
-                $param = $this->getParameters();
-
+            case 'tasks':
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'task', $param);
                 break;
-            case 'agentslog':
-                $param = $this->getParameters();
-
+            case 'agentslogs':
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'agentslog', $param);
                 break;
         }
 
-        return new JsonResponse($data);
+        return $data;
     }
 
     /**

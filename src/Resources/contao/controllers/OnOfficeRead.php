@@ -21,11 +21,10 @@ class OnOfficeRead extends OnOfficeHandler
      * @param int     $id              Id of onOffice module or resource id
      * @param int     $view            Id of onOffice api view
      * @param array   $arrDefaultParam Default params
-     * @param boolean $asArray         Return as array flag
      *
      * @return JsonResponse|array
      */
-    public function run(string $module, $id=null, $view=null, $arrDefaultParam=array(), $asArray=false)
+    public function run(string $module, $id=null, $view=null, $arrDefaultParam=array())
     {
         if (array_key_exists('view', $_GET))
         {
@@ -256,12 +255,7 @@ class OnOfficeRead extends OnOfficeHandler
                 break;
         }
 
-        if ($asArray)
-        {
-            return array('data' => $data['data'], 'status' => $data['status']);
-        }
-
-        return new JsonResponse(array('data' => $data['data'], 'status' => $data['status']));
+        return array('data' => $data['data'], 'status' => $data['status']);
     }
 
     /**

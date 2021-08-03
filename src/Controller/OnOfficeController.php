@@ -6,7 +6,6 @@ use Oveleon\ContaoOnofficeApiBundle\OnOfficeEdit;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeUpload;
 use Oveleon\ContaoOnofficeApiBundle\OnOfficeCreate;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -29,8 +28,9 @@ class OnOfficeController extends AbstractController
         $this->container->get('contao.framework')->initialize();
 
         $controller = new OnOfficeRead();
+        $data = $controller->run($module, $id);
 
-        return $controller->run($module, $id);
+        return new JsonResponse($data);
     }
 
     /**
@@ -43,8 +43,9 @@ class OnOfficeController extends AbstractController
         $this->container->get('contao.framework')->initialize();
 
         $controller = new OnOfficeEdit();
+        $data = $controller->run($module, $id);
 
-        return $controller->run($module, $id);
+        return new JsonResponse($data);
     }
 
     /**
@@ -57,8 +58,9 @@ class OnOfficeController extends AbstractController
         $this->container->get('contao.framework')->initialize();
 
         $controller = new OnOfficeUpload();
+        $data = $controller->run($module, $id);
 
-        return $controller->run($module, $id);
+        return new JsonResponse($data);
     }
 
     /**
@@ -71,7 +73,8 @@ class OnOfficeController extends AbstractController
         $this->container->get('contao.framework')->initialize();
 
         $controller = new OnOfficeCreate();
+        $data = $controller->run($module);
 
-        return $controller->run($module);
+        return new JsonResponse($data);
     }
 }

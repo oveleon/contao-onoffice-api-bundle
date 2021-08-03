@@ -3,7 +3,6 @@
 namespace Oveleon\ContaoOnofficeApiBundle;
 
 use onOffice\SDK\onOfficeSDK;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * onOffice edit api controller.
@@ -19,32 +18,28 @@ class OnOfficeEdit extends OnOfficeHandler
      * @param String $module  Plural name of onOffice module
      * @param int    $id      Id of onOffice module
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function run($module, $id)
+    public function run($module, $id, $arrParam=array())
     {
+        $param = !count($arrParam) ? $this->getParameters() : $arrParam;
+
         switch ($module)
         {
             case 'estates':
-                $param['data'] = $this->getParameters();
-
-                $data = $this->call(onOfficeSDK::ACTION_ID_MODIFY, onOfficeSDK::MODULE_ESTATE, $param, $id);
+                $data = $this->call(onOfficeSDK::ACTION_ID_MODIFY, onOfficeSDK::MODULE_ESTATE, ['data'=>$param], $id);
                 break;
             case 'addresses':
-                $param = $this->getParameters();
-
                 $data = $this->call(onOfficeSDK::ACTION_ID_MODIFY, onOfficeSDK::MODULE_ADDRESS, $param, $id);
                 break;
             case 'files':
-                $param = $this->getParameters();
-
                 $param['fileId'] = $id;
 
                 $data = $this->call(onOfficeSDK::ACTION_ID_MODIFY, 'file', $param, $id);
                 break;
         }
 
-        return new JsonResponse($data);
+        return $data;
     }
 
     /**

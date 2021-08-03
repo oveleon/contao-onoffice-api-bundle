@@ -3,7 +3,6 @@
 namespace Oveleon\ContaoOnofficeApiBundle;
 
 use onOffice\SDK\onOfficeSDK;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * onOffice upload file api controller.
@@ -16,29 +15,30 @@ class OnOfficeUpload extends OnOfficeHandler
     /**
      * Run the controller
      *
-     * @param String $module  Plural name of onOffice module
-     * @param int    $id      Id of onOffice module
+     * @param String $module    Plural name of onOffice module
+     * @param int    $id        Id of onOffice module
+     * @param array  $arrParam  Array of data parameters
      *
-     * @return JsonResponse
+     * @return array
      */
-    public function run($module, $id)
+    public function run($module, $id, $arrParam=array())
     {
         $arrValidModules = array('estates', 'addresses', 'agentslogs');
 
         if (!in_array($module, $arrValidModules))
         {
-            return new JsonResponse(array('error' => 'Not existing module called')); // ToDo: Richtigen Status zurückgeben und Fehlercode im Header ergänzen.
+            return array('error' => 'Not existing module called'); // ToDo: Richtigen Status zurückgeben und Fehlercode im Header ergänzen.
         }
 
         $arrValidParam1 = array('data', 'file');
         $arrValidParam2 = array('file', 'Art', 'title', 'freetext', 'documentAttribute', 'relatedRecordId', 'estatelanguage', 'language', 'setDefaultPublicationRights');
 
-        $param = $this->getParameters($arrValidParam1);
+        $param = $this->getValidParameters($arrValidParam1, $arrParam);
         $data = $this->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
 
         unset($param);
 
-        $param = $this->getParameters($arrValidParam2);
+        $param = $this->getValidParameters($arrValidParam2, $arrParam);
 
         if (isset($param['Art']) && $param['Art'] === 'Titelbild')
         {
@@ -52,21 +52,23 @@ class OnOfficeUpload extends OnOfficeHandler
 
         $data = $this->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
 
-        return new JsonResponse($data);
+        return $data;
     }
 
     /**
      * Return parameters by POST method
      *
      * @param array $arrValidParam    Array of valid parameters
+     * @param array $arrParam         Array of data parameters
      *
      * @return array
      */
-    private function getParameters($arrValidParam)
+    private function getValidParameters($arrValidParam, $arrParam)
     {
+        $arrParam = !count($arrParam) ? $_POST : $arrParam;
         $param = array();
 
-        foreach ($_POST as $key => $value)
+        foreach ($arrParam as $key => $value)
         {
             if ($key === 'data')
             {
