@@ -40,6 +40,9 @@ class OnOfficeCreate extends OnOfficeHandler
             case 'agentslogs':
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'agentslog', $param);
                 break;
+            case 'relations':
+                $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'relation', $param);
+                break;
         }
 
         return $data;
