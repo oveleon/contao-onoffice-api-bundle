@@ -55,6 +55,26 @@ class OnOfficeUpload extends OnOfficeHandler
         return $data;
     }
 
+    public function run2($module, $id, $arrParam=array())
+    {
+        $arrValidModules = array('estates', 'addresses', 'agentslogs');
+
+        if (!in_array($module, $arrValidModules))
+        {
+            return array('error' => 'Not existing module called'); // ToDo: Richtigen Status zurückgeben und Fehlercode im Header ergänzen.
+        }
+
+        $arrValidParam1 = array('title', 'Art', 'url');
+
+        $param = $this->getValidParameters($arrValidParam1, $arrParam);
+        $param['module'] = $this->getModuleName($module);
+        $param['relatedRecordId'] = $id;
+
+        $data = $this->call(onOfficeSDK::ACTION_ID_DO, 'uploadfile', $param);
+
+        return $data;
+    }
+
     /**
      * Return parameters by POST method
      *
