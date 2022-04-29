@@ -17,19 +17,23 @@ class OnOfficeRead extends OnOfficeHandler
     /**
      * Run the controller
      *
-     * @param String  $module          Plural name of onOffice module
-     * @param int     $id              Id of onOffice module or resource id
-     * @param int     $view            Id of onOffice api view
-     * @param array   $arrDefaultParam Default params
-     * @param boolean $asArray         Return as array flag
+     * @param String  $module           Plural name of onOffice module
+     * @param int|null $id              Id of onOffice module or resource id
+     * @param int|null $view            Id of onOffice api view
+     * @param array $arrDefaultParam    Default params
+     * @param boolean $asArray          Return as array flag
      *
      * @return JsonResponse|array
      */
-    public function run(string $module, $id=null, $view=null, $arrDefaultParam=array(), $asArray=false)
+    public function run(string $module, ?int $id=null, ?int $view=null, array $arrDefaultParam=[], bool $asArray=false)
     {
-        if (array_key_exists('view', $_GET))
+        $apiOptions = new ApiOptions(Options::MODE_READ);
+
+        $arrDefaultParam = $apiOptions->validate($arrDefaultParam, true);
+
+        if ($apiOptions->isValid('view'))
         {
-            $arrDefaultParam = $this->getViewParameters($_GET['view'], $arrDefaultParam);
+            $arrDefaultParam = $this->getViewParameters($arrDefaultParam['view'], $arrDefaultParam);
         }
         elseif (!is_null($view))
         {
@@ -46,19 +50,9 @@ class OnOfficeRead extends OnOfficeHandler
         switch ($module)
         {
             case 'estates':
-                $addContactPerson = false;
-
-                if ($arrDefaultParam['addContactPerson'])
-                {
-                    $addContactPerson = true;
-                    unset($arrDefaultParam['addContactPerson']);
-                }
-
-                $arrValidParam = array('data', 'filterid', 'filter', 'listlimit', 'listoffset', 'sortby', 'formatoutput', 'estatelanguage', 'outputlanguage');
-
                 if (!array_key_exists('data', $arrDefaultParam))
                 {
-                    $arrDefaultParam['data'] = array('Id', 'kaufpreis', 'lage', 'objektnr_extern');
+                    $arrDefaultParam['data'] = array('Id', 'objektnr_extern');
                 }
                 else
                 {
@@ -70,13 +64,14 @@ class OnOfficeRead extends OnOfficeHandler
                     $arrDefaultParam['filter'] = array('Id' => [['op' => '=', 'val' => $id]]);
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+                $param = (new EstateOptions(Options::MODE_READ))->validate($arrDefaultParam, true);
+
                 $this->setFilterIdByUser($param);
 
                 $data = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ESTATE, $param);
 
                 // Resolve contact persons and update data records
-                if ($addContactPerson)
+                if ($apiOptions->isValid('addContactPerson'))
                 {
                     $arrEstateIds = array();
                     $arrContactIds = array();
@@ -86,7 +81,14 @@ class OnOfficeRead extends OnOfficeHandler
                         $arrEstateIds[] = $record['id'];
                     }
 
-                    $contactPersons = $this->call(onOfficeSDK::ACTION_ID_GET, 'idsfromrelation', array('relationtype'=>onOfficeSDK::RELATION_TYPE_CONTACT_BROKER, 'parentids'=>$arrEstateIds));
+                    $contactPersons = $this->call(
+                        onOfficeSDK::ACTION_ID_GET,
+                        'idsfromrelation',
+                        [
+                            'relationtype' => onOfficeSDK::RELATION_TYPE_CONTACT_BROKER,
+                            'parentids' => $arrEstateIds
+                        ]
+                    );
 
                     foreach ($contactPersons['data']['records'][0]['elements'] as $id => $contactIds)
                     {
@@ -99,7 +101,15 @@ class OnOfficeRead extends OnOfficeHandler
                         }
                     }
 
-                    $addresses = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, array('recordids'=>$arrContactIds, 'data'=>['Anrede','Email','Name','Vorname','Land','Ort','Plz','Strasse','Telefon1','imageUrl','Kundenlogo','Zusatz1']));
+                    $addresses = $this->call(
+                        onOfficeSDK::ACTION_ID_READ,
+                        onOfficeSDK::MODULE_ADDRESS,
+                        [
+                            'recordids' => $arrContactIds,
+                            'data' => (new AddressOptions(Options::MODE_READ))->get()['data']
+                        ]
+                    );
+
                     $arrAddresses = array();
 
                     foreach ($addresses['data']['records'] as $address)
@@ -144,7 +154,7 @@ class OnOfficeRead extends OnOfficeHandler
                 }
                 break;
             case 'addresses':
-                $arrValidParam = array('data', 'recordids', 'filterid', 'listlimit', 'listoffset', 'formatoutput', 'outputlanguage');
+                $arrValidParam = array('data', 'recordids', 'filterid', 'filter', 'listlimit', 'listoffset', 'formatoutput', 'outputlanguage', 'sortby', 'sortorder', 'countryIsoCodeType', 'addMobileUrl');
 
                 if (!array_key_exists('data', $arrDefaultParam))
                 {
@@ -258,10 +268,10 @@ class OnOfficeRead extends OnOfficeHandler
 
         if ($asArray)
         {
-            return array('data' => $data['data'], 'status' => $data['status']);
+            return array('data' => $data['data'] ?? null, 'status' => $data['status'] ?? null);
         }
 
-        return new JsonResponse(array('data' => $data['data'], 'status' => $data['status']));
+        return new JsonResponse(array('data' => $data['data'] ?? null, 'status' => $data['status'] ?? null));
     }
 
     /**
@@ -291,23 +301,25 @@ class OnOfficeRead extends OnOfficeHandler
     }
 
     /**
-     * Set filterid by an user
+     * Set filterid by user
      *
      * @param array $param Array of default parameters
      */
     private function setFilterIdByUser(&$param)
     {
-        if ($param['filterid'] !== 0 && $param['filterid'] !== null)
+        $objMemberGroup = null;
+
+        if (array_key_exists('filterid', $param) && $param['filterid'] !== 0 && $param['filterid'] !== null)
         {
             return;
         }
 
-        if ($_SESSION['onOfficeBranchGroup'])
+        if (array_key_exists('onOfficeBranchGroup', $_SESSION))
         {
             $objMemberGroup = MemberGroupModel::findByPk($_SESSION['onOfficeBranchGroup']);
             unset($_SESSION['onOfficeBranchGroup']);
         }
-        else
+        elseif($this->User->onOfficeBranchGroup)
         {
             $objMemberGroup = MemberGroupModel::findByPk($this->User->onOfficeBranchGroup);
         }
@@ -330,7 +342,7 @@ class OnOfficeRead extends OnOfficeHandler
      */
     private function getViewParameters($view, $param=array())
     {
-        if (is_int($view))
+        if (is_numeric($view))
         {
             $objApiView = $this->Database->prepare("SELECT * FROM tl_onoffice_api_view WHERE id=? AND published=1")
                 ->limit(1)

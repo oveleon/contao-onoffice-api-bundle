@@ -10,6 +10,13 @@ namespace Oveleon\ContaoOnofficeApiBundle;
 class Fieldset
 {
     /**
+     * Output format constants (get)
+     */
+    const FORMAT_ORIGINAL = 0;
+    const FORMAT_FLAT = 1;
+    const FORMAT_KEYS = 2;
+
+    /**
      * Object instance (Singleton)
      * @var Fieldset
      */
@@ -79,7 +86,7 @@ class Fieldset
      *
      * @return mixed The fieldset data
      */
-    public static function get($resourceType, $arrModules = null)
+    public static function get($resourceType, $arrModules = null, int $format = self::FORMAT_ORIGINAL)
     {
         $data = null;
         $moduleQueue = null;
@@ -116,7 +123,7 @@ class Fieldset
 
         if($moduleQueue !== null || $forceCall)
         {
-            // call and set non existing modules
+            // call and set non-existing modules
             static::set($resourceType, static::call($resourceType, $moduleQueue));
 
             if($moduleQueue !== null)
@@ -132,7 +139,61 @@ class Fieldset
             }
         }
 
-        return $data;
+        return static::format($data, $format);
+    }
+
+    /**
+     * Format data array
+     *
+     * @param $data
+     * @param $format
+     *
+     * @return mixed
+     */
+    public static function format($data, $format): ?array
+    {
+        if(null === $data)
+        {
+            return null;
+        }
+
+        $arrFormatted = [];
+
+        switch ($format)
+        {
+            case self::FORMAT_FLAT:
+
+                foreach ($data as $module => $d)
+                {
+                    $arrFormatted[ $module ] = $d['elements'] ?? [];
+
+                    // Remove label
+                    if(array_key_exists('label', $arrFormatted[ $module ]))
+                    {
+                        unset($arrFormatted[ $module ]['label']);
+                    }
+                }
+                break;
+
+            case self::FORMAT_KEYS:
+
+                foreach ($data as $module => $d)
+                {
+                    $arrFormatted[ $module ] = array_keys($d['elements'] ?? []);
+
+                    // Remove label
+                    if(($index = array_search('label', $arrFormatted[ $module ])) !== false)
+                    {
+                        array_splice($arrFormatted[ $module ], $index, 1);
+                    }
+                }
+                break;
+
+            default:
+                return $data;
+        }
+
+        return $arrFormatted;
     }
 
     /**

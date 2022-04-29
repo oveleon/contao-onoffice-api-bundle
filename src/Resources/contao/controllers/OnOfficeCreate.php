@@ -17,27 +17,49 @@ class OnOfficeCreate extends OnOfficeHandler
      *
      * @param String $module  Plural name of onOffice module
      *
-     * @return JsonResponse
+     * @return JsonResponse|array
      */
-    public function run($module)
+    public function run($module, ?array $arrDefaultParam=null, bool $asArray=false)
     {
+        $param = $this->getParameters();
+
+        if(null !== $arrDefaultParam)
+        {
+            $param = array_merge_recursive($arrDefaultParam, $param);
+        }
+
         switch ($module)
         {
-            case 'appointment':
-                $param = $this->getParameters();
+            case 'estate':
+                $options = (new EstateOptions(Options::MODE_CREATE))->validate($param,  true);
 
+                //$data = $this->call(onOfficeSDK::ACTION_ID_CREATE, onOfficeSDK::MODULE_ESTATE, $options);
+
+                if(array_key_exists('addContactPerson', $param))
+                {
+                    //$objRead = new OnOfficeRead();
+
+                    /*$objRead->run('search', onOfficeSDK::MODULE_ADDRESS, null, [
+                        'includecontactdata' => 1
+                    ]);*/
+                }
+
+
+                break;
+            case 'appointment':
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'calendar', $param);
                 break;
             case 'task':
-                $param = $this->getParameters();
-
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'task', $param);
                 break;
             case 'agentslog':
-                $param = $this->getParameters();
-
                 $data = $this->call(onOfficeSDK::ACTION_ID_CREATE, 'agentslog', $param);
                 break;
+        }
+
+        if ($asArray)
+        {
+            return $data;
         }
 
         return new JsonResponse($data);

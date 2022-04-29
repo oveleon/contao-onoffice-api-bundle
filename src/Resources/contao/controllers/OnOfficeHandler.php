@@ -40,8 +40,15 @@ abstract class OnOfficeHandler extends Frontend
         // Check whether a user is logged in
         $objTokenChecker = System::getContainer()->get('contao.security.token_checker');
 
-        \define('BE_USER_LOGGED_IN', $objTokenChecker->hasBackendUser());
-        \define('FE_USER_LOGGED_IN', $objTokenChecker->hasFrontendUser());
+        if(!defined('BE_USER_LOGGED_IN'))
+        {
+            \define('BE_USER_LOGGED_IN', $objTokenChecker->hasBackendUser());
+        }
+
+        if(!defined('FE_USER_LOGGED_IN'))
+        {
+            \define('FE_USER_LOGGED_IN', $objTokenChecker->hasFrontendUser());
+        }
 
         parent::__construct();
     }
@@ -55,9 +62,9 @@ abstract class OnOfficeHandler extends Frontend
      * @param int        $resourceId    Optional onOffice api resource id
      * @param String     $identifier    Optional onOffice api identifier
      *
-     * @return array
+     * @return null|array
      */
-    public function call(string $actionId, string $resourceType, array $parameters, $resourceId=null, $identifier=null): array
+    public function call(string $actionId, string $resourceType, array $parameters, $resourceId=null, $identifier=null): ?array
     {
         $handle = $this->sdk->call(
             $actionId,
@@ -75,9 +82,9 @@ abstract class OnOfficeHandler extends Frontend
      *
      * @param int $handleId Handle id of an onOffice call
      *
-     * @return array
+     * @return null|array
      */
-    private function request(int $handleId): array
+    private function request(int $handleId): ?array
     {
         $this->sdk->sendRequests(
             $this->token,
