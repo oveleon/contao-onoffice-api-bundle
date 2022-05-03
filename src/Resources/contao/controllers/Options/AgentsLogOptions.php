@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class AgentsLogOptions extends Options
+final class AgentsLogOptions extends Options
 {
     protected function configure(): void
     {
@@ -39,14 +39,14 @@ class AgentsLogOptions extends Options
         ]);
     }
 
-    protected function setName(): void
+    protected function getName(): string
     {
-        $this->name = 'agentsLog';
+        return 'agentsLog';
     }
 
-    protected function setModes(): void
+    protected function getModes(): array
     {
-        $this->modes = [
+        return [
             Options::MODE_READ
         ];
     }

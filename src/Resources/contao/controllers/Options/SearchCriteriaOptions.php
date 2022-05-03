@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class SearchCriteriaOptions extends Options
+final class SearchCriteriaOptions extends Options
 {
     protected function configure(): void
     {

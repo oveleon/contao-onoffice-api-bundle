@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class QualifiedSuitorOptions extends Options
+final class QualifiedSuitorOptions extends Options
 {
     protected function configure(): void
     {

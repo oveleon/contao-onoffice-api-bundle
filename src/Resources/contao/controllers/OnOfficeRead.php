@@ -135,10 +135,9 @@ class OnOfficeRead extends OnOfficeHandler
                 break;
             case OnOfficeConstants::READ_ESTATE_PICTURES:
 
-                // ToDo: use EstatePictureOptions
                 $estatePictureOptions = new EstatePictureOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for estate pictures Options
                 $estatePictureParameter = $estatePictureOptions->validate($arrDefaultParam, true);
 
                 // Set default values if no data is passed
@@ -172,7 +171,7 @@ class OnOfficeRead extends OnOfficeHandler
 
                 $addressOptions = new AddressOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for Address Options
                 $addressParameter = $addressOptions->validate($arrDefaultParam, true);
 
                 // Set default values if no data is passed
@@ -199,7 +198,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_AGENTS_LOGS:
                 $agentsLogOptions = new AgentsLogOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for agent logs Options
                 $agentsLogParameter = $agentsLogOptions->validate($arrDefaultParam, true);
 
                 // Set default values if no data is passed
@@ -223,7 +222,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_USERS:
                 $userOptions = new UserOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for user Options
                 $userParameter = $userOptions->validate($arrDefaultParam, true);
 
                 // Set default values if no data is passed
@@ -241,7 +240,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_FIELDS:
                 $fieldOptions = new FieldOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for field Options
                 $fieldParameter = $fieldOptions->validate($arrDefaultParam, true);
 
                 // Check if a single property is called
@@ -259,7 +258,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_SEARCH_CRITERIAS:
                 $searchCriteriaOptions = new SearchCriteriaOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for search criteria Options
                 $searchCriteriaParameter = $searchCriteriaOptions->validate($arrDefaultParam, true);
 
                 $data = $this->call(
@@ -278,7 +277,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_QUALIFIED_SUITORS:
                 $qualifiedSuitorOptions = new QualifiedSuitorOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for qualified suitors Options
                 $qualifiedSuitorParameter = $qualifiedSuitorOptions->validate($arrDefaultParam, true);
 
                 $data = $this->call(
@@ -290,7 +289,7 @@ class OnOfficeRead extends OnOfficeHandler
             case OnOfficeConstants::READ_REGIONS:
                 $regionOptions = new QualifiedSuitorOptions(Options::MODE_READ);
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for region Options
                 $regionParameter = $regionOptions->validate($arrDefaultParam, true);
 
                 $data = $this->call(
@@ -322,7 +321,7 @@ class OnOfficeRead extends OnOfficeHandler
                         $searchOptions = new SearchEstateOptions(Options::MODE_READ);
                 }
 
-                // Cleanup of parameters for Estate Options
+                // Cleanup of parameters for search Options
                 $searchParameter = $searchOptions->validate($arrDefaultParam, true);
 
                 $data = $this->call(

@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class EstatePictureOptions extends Options
+final class EstatePictureOptions extends Options
 {
     protected function configure(): void
     {

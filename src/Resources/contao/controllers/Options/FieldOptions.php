@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class FieldOptions extends Options
+final class FieldOptions extends Options
 {
     protected function configure(): void
     {

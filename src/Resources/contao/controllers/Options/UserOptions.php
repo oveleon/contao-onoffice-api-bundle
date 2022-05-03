@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class UserOptions extends Options
+final class UserOptions extends Options
 {
     protected function configure(): void
     {
@@ -14,14 +14,14 @@ class UserOptions extends Options
         ]);
     }
 
-    protected function setName(): void
+    protected function getName(): string
     {
-        $this->name = 'user';
+        return 'user';
     }
 
-    protected function setModes(): void
+    protected function getModes(): array
     {
-        $this->modes = [
+        return [
             Options::MODE_READ
         ];
     }

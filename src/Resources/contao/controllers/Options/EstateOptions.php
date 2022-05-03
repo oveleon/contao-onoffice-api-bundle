@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class EstateOptions extends Options
+final class EstateOptions extends Options
 {
     protected function configure(): void
     {
@@ -22,14 +22,14 @@ class EstateOptions extends Options
         ]);
     }
 
-    protected function setName(): void
+    protected function getName(): string
     {
-        $this->name = 'estate';
+        return 'estate';
     }
 
-    protected function setModes(): void
+    protected function getModes(): array
     {
-        $this->modes = [
+        return [
             Options::MODE_CREATE,
             Options::MODE_READ,
             Options::MODE_EDIT

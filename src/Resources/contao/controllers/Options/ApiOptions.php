@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class ApiOptions extends Options
+final class ApiOptions extends Options
 {
     protected function configure(): void
     {
@@ -11,6 +11,11 @@ class ApiOptions extends Options
             'addContactPerson',
             'contactPersonData',
             'savetemporary'
+        ]);
+
+        $this->set(self::MODE_CREATE, [
+            'addContactPerson',
+            'contactPersonData'
         ]);
     }
 }

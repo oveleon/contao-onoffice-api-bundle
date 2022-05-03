@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class RegionOptions extends Options
+final class RegionOptions extends Options
 {
     protected function configure(): void
     {

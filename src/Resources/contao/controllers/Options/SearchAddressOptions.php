@@ -2,7 +2,7 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class SearchAddressOptions extends Options
+final class SearchAddressOptions extends Options
 {
     protected function configure(): void
     {

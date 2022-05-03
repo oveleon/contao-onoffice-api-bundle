@@ -16,6 +16,12 @@ class OnOfficeConstants
     const READ_REGIONS = 'regions';
     const READ_SEARCH = 'search';
 
+    const CREATE_ESTATE = 'estate';
+    const CREATE_APPOINTMENT = 'appointment';
+    const CREATE_TASK = 'task';
+    const CREATE_AGENTS_LOG = 'agentslog';
+    const CREATE_ADDRESS = 'address';
+
     const ESTATE_STATUS_ACTIVE = 1;
     const ESTATE_STATUS_INACTIVE = 2;
     const ESTATE_STATUS_ARCHIVE = 0;
