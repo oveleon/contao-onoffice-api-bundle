@@ -2,15 +2,13 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class ApiOptions extends Options
+class SearchCriteriaOptions extends Options
 {
     protected function configure(): void
     {
         $this->set(self::MODE_READ, [
-            'view',
-            'addContactPerson',
-            'contactPersonData',
-            'savetemporary'
+            'mode',
+            'ids'
         ]);
     }
 }

@@ -33,13 +33,13 @@ abstract class Options implements OptionsInterface
      * Module name
      * Used to retrieve field configurations from onOffice.
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     /**
      * Accepted modes
      * Defines the modes which are extended by the field configurations.
      */
-    protected ?array $modes;
+    protected ?array $modes = null;
 
     /**
      * Current mode scope
@@ -78,19 +78,19 @@ abstract class Options implements OptionsInterface
     }
 
     /**
-     * Set module name
-     */
-    abstract protected function setName(): void;
-
-    /**
-     * Set accepted modes
-     */
-    abstract protected function setModes(): void;
-
-    /**
-     * Set accepted modes
+     * Configure valid options
      */
     abstract protected function configure(): void;
+
+    /**
+     * Set module name
+     */
+    protected function setName(): void {}
+
+    /**
+     * Set accepted modes
+     */
+    protected function setModes(): void {}
 
     /**
      * Set valid parameter additive by mode
@@ -128,13 +128,21 @@ abstract class Options implements OptionsInterface
     }
 
     /**
+     * Set valid parameter additive by current mode
+     */
+    public function add(array $data): void
+    {
+        $this->set($this->mode, $data);
+    }
+
+    /**
      * Check if a key exists for validated data
      */
     public function isValid($key): bool
     {
         if(null === $this->validated)
         {
-            throw new Exception('Before isValid method can be executed, the validate method must be executed.');
+            throw new Exception('Use the validate method before executing isValid.');
         }
 
         if(!array_key_exists($this->mode, $this->validated))
@@ -216,7 +224,7 @@ abstract class Options implements OptionsInterface
                 continue;
             }
 
-            if(array_key_exists($val, $param))
+            if(!is_array($val) && array_key_exists($val, $param))
             {
                 $accepts[ $val ] = $param[ $val ];
             }

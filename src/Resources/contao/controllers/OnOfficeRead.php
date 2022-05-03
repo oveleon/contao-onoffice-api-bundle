@@ -29,52 +29,57 @@ class OnOfficeRead extends OnOfficeHandler
     {
         $apiOptions = new ApiOptions(Options::MODE_READ);
 
+        // Cleanup of parameters for API Options
         $arrDefaultParam = $apiOptions->validate($arrDefaultParam, true);
 
+        // Extend view parameters
         if ($apiOptions->isValid('view'))
         {
             $arrDefaultParam = $this->getViewParameters($arrDefaultParam['view'], $arrDefaultParam);
         }
-        elseif (!is_null($view))
+        elseif (null !== $view)
         {
             $arrDefaultParam = $this->getViewParameters($view, $arrDefaultParam);
         }
 
-        if (array_key_exists('filterid', $_GET))
-        {
-            $arrDefaultParam['filterid'] = $_GET['filterid'];
-        }
-
-        $data = array();
-
         switch ($module)
         {
-            case 'estates':
-                if (!array_key_exists('data', $arrDefaultParam))
-                {
-                    $arrDefaultParam['data'] = array('Id', 'objektnr_extern');
-                }
-                else
-                {
-                    array_unshift($arrDefaultParam['data'], 'Id');
-                }
+            case OnOfficeConstants::READ_ESTATES:
 
-                if (!is_null($id))
+                // Check if a single property is called
+                if (null !== $id)
                 {
-                    $arrDefaultParam['filter'] = array('Id' => [['op' => '=', 'val' => $id]]);
+                    // Create filters for retrieving a single property
+                    $arrDefaultParam['filter'] = [
+                        'Id' => [ ['op' => '=', 'val' => $id] ]
+                    ];
                 }
 
-                $param = (new EstateOptions(Options::MODE_READ))->validate($arrDefaultParam, true);
+                $estateOptions = new EstateOptions(Options::MODE_READ);
 
-                $this->setFilterIdByUser($param);
+                // Cleanup of parameters for Estate Options
+                $estateParameter = $estateOptions->validate($arrDefaultParam, true);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ESTATE, $param);
+                // Set default values if no data is passed
+                if(!$estateOptions->isValid('data'))
+                {
+                    $estateParameter['data'] = ['Id'];
+                }
 
-                // Resolve contact persons and update data records
+                // ToDo: ?
+                $this->setFilterIdByUser($estateParameter);
+
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_READ,
+                    onOfficeSDK::MODULE_ESTATE,
+                    $estateParameter
+                );
+
+                // Resolve contact persons and extend data records
                 if ($apiOptions->isValid('addContactPerson'))
                 {
-                    $arrEstateIds = array();
-                    $arrContactIds = array();
+                    $arrEstateIds = [];
+                    $arrContactIds = [];
 
                     foreach ($data['data']['records'] as $record)
                     {
@@ -101,13 +106,15 @@ class OnOfficeRead extends OnOfficeHandler
                         }
                     }
 
+                    $addressParameter = (new AddressOptions(Options::MODE_READ))->validate([
+                        'recordids' => $arrContactIds,
+                        'data'      => $apiOptions->isValid('contactPersonData') ? $arrDefaultParam['contactPersonData'] : ['KdNr']
+                    ]);
+
                     $addresses = $this->call(
                         onOfficeSDK::ACTION_ID_READ,
                         onOfficeSDK::MODULE_ADDRESS,
-                        [
-                            'recordids' => $arrContactIds,
-                            'data' => (new AddressOptions(Options::MODE_READ))->get()['data']
-                        ]
+                        $addressParameter
                     );
 
                     $arrAddresses = array();
@@ -126,119 +133,174 @@ class OnOfficeRead extends OnOfficeHandler
                     }
                 }
                 break;
-            case 'estatepictures':
-                $arrValidParam = array('estateids', 'categories', 'size', 'language');
+            case OnOfficeConstants::READ_ESTATE_PICTURES:
 
-                if (!array_key_exists('categories', $arrDefaultParam))
+                // ToDo: use EstatePictureOptions
+                $estatePictureOptions = new EstatePictureOptions(Options::MODE_READ);
+
+                // Cleanup of parameters for Estate Options
+                $estatePictureParameter = $estatePictureOptions->validate($arrDefaultParam, true);
+
+                // Set default values if no data is passed
+                if(!$estatePictureOptions->isValid('categories'))
                 {
-                    $arrDefaultParam['categories'] = array('Titelbild', 'Foto', 'Foto_gross', 'Grundriss', 'Lageplan', 'Epass_Skala', 'Panorama');
+                    $estateParameter['categories'] = ['Titelbild'];
                 }
 
                 if (is_array($id))
                 {
                     $arrDefaultParam['estateids'] = $id;
                 }
-                elseif (!is_null($id))
+                elseif (null !== $id)
                 {
-                    $arrDefaultParam['estateids'] = array($id);
+                    $arrDefaultParam['estateids'] = [$id];
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
-
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'estatepictures', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'estatepictures',
+                    $estatePictureParameter
+                );
 
                 // Store images temporary
-                if (array_key_exists('savetemporary', $_GET) && $_GET['savetemporary'])
+                if ($apiOptions->isValid('savetemporary'))
                 {
                     $this->cacheEstatePictures($data);
                 }
                 break;
-            case 'addresses':
-                $arrValidParam = array('data', 'recordids', 'filterid', 'filter', 'listlimit', 'listoffset', 'formatoutput', 'outputlanguage', 'sortby', 'sortorder', 'countryIsoCodeType', 'addMobileUrl');
+            case OnOfficeConstants::READ_ADDRESSES:
 
-                if (!array_key_exists('data', $arrDefaultParam))
+                $addressOptions = new AddressOptions(Options::MODE_READ);
+
+                // Cleanup of parameters for Estate Options
+                $addressParameter = $addressOptions->validate($arrDefaultParam, true);
+
+                // Set default values if no data is passed
+                if(!$addressOptions->isValid('data'))
                 {
-                    $arrDefaultParam['data'] = array('Briefanrede', 'Email', 'Land', 'Name', 'Ort', 'Plz', 'Strasse', 'Vorname', 'AGB_akzeptiert', 'imageUrl');
+                    $addressParameter['data'] = ['KdNr'];
                 }
 
-                if (!is_null($id))
+                // Check if a single property is called
+                if (null !== $id)
                 {
-                    $arrDefaultParam['recordids'] = array($id);
+                    $addressParameter['recordids'] = [$id];
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
-                $this->setFilterIdByUser($param);
+                // ToDo: ?
+                $this->setFilterIdByUser($addressParameter);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_READ, onOfficeSDK::MODULE_ADDRESS, $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_READ,
+                    onOfficeSDK::MODULE_ADDRESS,
+                    $addressParameter
+                );
                 break;
-            case 'agentslogs':
-                $arrValidParam = array('data', 'tracking', 'estateid', 'listlimit');
+            case OnOfficeConstants::READ_AGENTS_LOGS:
+                $agentsLogOptions = new AgentsLogOptions(Options::MODE_READ);
 
-                if (!array_key_exists('data', $arrDefaultParam))
+                // Cleanup of parameters for Estate Options
+                $agentsLogParameter = $agentsLogOptions->validate($arrDefaultParam, true);
+
+                // Set default values if no data is passed
+                if(!$agentsLogOptions->isValid('data'))
                 {
-                    $arrDefaultParam['data'] = array('Objekt_nr', 'Aktionsart', 'Aktionstyp', 'Datum', 'Bemerkung', 'merkmal');
+                    $agentsLogParameter['data'] = ['Aktionsart'];
                 }
 
-                if (!is_null($id))
+                // Check if a single property is called
+                if (null !== $id)
                 {
-                    $arrDefaultParam['estateid'] = $id;
+                    $agentsLogParameter['estateid'] = $id;
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
-
-                $data = $this->call(onOfficeSDK::ACTION_ID_READ, 'agentslog', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_READ,
+                    'agentslog',
+                    $agentsLogParameter
+                );
                 break;
-            case 'users':
-                // ToDo
-                $arrValidParam = array('data', 'filter', 'sortby', 'listlimit');
+            case OnOfficeConstants::READ_USERS:
+                $userOptions = new UserOptions(Options::MODE_READ);
 
-                if (!array_key_exists('data', $arrDefaultParam))
+                // Cleanup of parameters for Estate Options
+                $userParameter = $userOptions->validate($arrDefaultParam, true);
+
+                // Set default values if no data is passed
+                if(!$userOptions->isValid('data'))
                 {
-                    $arrDefaultParam['data'] = array('Nachname');
+                    $userParameter['data'] = ['Nachname'];
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
-
-                $data = $this->call(onOfficeSDK::ACTION_ID_READ, 'user', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_READ,
+                    'user',
+                    $userParameter
+                );
                 break;
-            case 'fields':
-                $arrValidParam = array('labels', 'language', 'fieldList', 'modules', 'showOnlyInactive');
+            case OnOfficeConstants::READ_FIELDS:
+                $fieldOptions = new FieldOptions(Options::MODE_READ);
 
-                if (!is_null($id))
+                // Cleanup of parameters for Estate Options
+                $fieldParameter = $fieldOptions->validate($arrDefaultParam, true);
+
+                // Check if a single property is called
+                if (null !== $id)
                 {
-                    $arrDefaultParam['modules'] = array($id);
+                    $fieldParameter['modules'] = [$id];
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
-
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'fields', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'fields',
+                    $fieldParameter
+                );
                 break;
-            case 'searchcriterias':
-                $arrValidParam = array('mode', 'ids');
+            case OnOfficeConstants::READ_SEARCH_CRITERIAS:
+                $searchCriteriaOptions = new SearchCriteriaOptions(Options::MODE_READ);
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+                // Cleanup of parameters for Estate Options
+                $searchCriteriaParameter = $searchCriteriaOptions->validate($arrDefaultParam, true);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'searchcriterias', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'searchcriterias',
+                    $searchCriteriaParameter
+                );
                 break;
-            case 'searchcriteriafields':
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'searchCriteriaFields', array());
+            case OnOfficeConstants::READ_SEARCH_CRITERIA_FIELDS:
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'searchCriteriaFields',
+                    []
+                );
                 break;
-            case 'qualifiedsuitors':
-                $arrValidParam = array('estatedata');
+            case OnOfficeConstants::READ_QUALIFIED_SUITORS:
+                $qualifiedSuitorOptions = new QualifiedSuitorOptions(Options::MODE_READ);
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+                // Cleanup of parameters for Estate Options
+                $qualifiedSuitorParameter = $qualifiedSuitorOptions->validate($arrDefaultParam, true);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'qualifiedsuitors', $param);
-
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'qualifiedsuitors',
+                    $qualifiedSuitorParameter
+                );
                 break;
-            case 'regions':
-                $arrValidParam = array('language');
+            case OnOfficeConstants::READ_REGIONS:
+                $regionOptions = new QualifiedSuitorOptions(Options::MODE_READ);
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+                // Cleanup of parameters for Estate Options
+                $regionParameter = $regionOptions->validate($arrDefaultParam, true);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'regions', $param);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'regions',
+                    $regionParameter
+                );
                 break;
-            case 'search':
+            case OnOfficeConstants::READ_SEARCH:
+
                 if(!$id)
                 {
                     $data['status'] = array(
@@ -251,61 +313,44 @@ class OnOfficeRead extends OnOfficeHandler
                 switch($id)
                 {
                     case 'address':
-                        $arrValidParam = array('includecontactdata', 'casesensitive', 'searchparameter', 'listlimit', 'extendedclaim', 'input', 'extendedclaim');
+                        $searchOptions = new SearchAddressOptions(Options::MODE_READ);
                         break;
                     case 'searchcriteria':
-                        $arrValidParam = array('searchdata', 'outputall', 'outputfields', 'groupbyaddress', 'offset', 'limit', 'order');
+                        $searchOptions = new SearchSearchCriteriaOptions(Options::MODE_READ);
                         break;
                     default:
-                        $arrValidParam = array('input', 'extendedclaim');
+                        $searchOptions = new SearchEstateOptions(Options::MODE_READ);
                 }
 
-                $param = $this->getParameters($arrValidParam, $arrDefaultParam);
+                // Cleanup of parameters for Estate Options
+                $searchParameter = $searchOptions->validate($arrDefaultParam, true);
 
-                $data = $this->call(onOfficeSDK::ACTION_ID_GET, 'search', $param, $id);
+                $data = $this->call(
+                    onOfficeSDK::ACTION_ID_GET,
+                    'search',
+                    $searchParameter,
+                    $id
+                );
                 break;
         }
 
+        $response = [
+            'data' => $data['data'] ?? null,
+            'status' => $data['status'] ?? null
+        ];
+
         if ($asArray)
         {
-            return array('data' => $data['data'] ?? null, 'status' => $data['status'] ?? null);
+            return $response;
         }
 
-        return new JsonResponse(array('data' => $data['data'] ?? null, 'status' => $data['status'] ?? null));
+        return new JsonResponse($response);
     }
 
     /**
-     * Return parameters by GET method
-     *
-     * @param array $arrValidParam  Array of valid parameters
-     * @param array $param          Optional array of default parameters
-     *
-     * @return array
+     * Set filter-id by user
      */
-    private function getParameters($arrValidParam, $param=array())
-    {
-        foreach ($_GET as $key => $value)
-        {
-            if ($key === 'data' && !is_array($value))
-            {
-                $value = explode(',', $value);
-            }
-
-            if (in_array($key, $arrValidParam))
-            {
-                $param[$key] = $value;
-            }
-        }
-
-        return $param;
-    }
-
-    /**
-     * Set filterid by user
-     *
-     * @param array $param Array of default parameters
-     */
-    private function setFilterIdByUser(&$param)
+    private function setFilterIdByUser(array &$param)
     {
         $objMemberGroup = null;
 
@@ -340,7 +385,7 @@ class OnOfficeRead extends OnOfficeHandler
      *
      * @return array
      */
-    private function getViewParameters($view, $param=array())
+    private function getViewParameters($view, $param=[])
     {
         if (is_numeric($view))
         {
@@ -509,12 +554,8 @@ class OnOfficeRead extends OnOfficeHandler
 
     /**
      * Return actual operator by an operator alias
-     *
-     * @param String $operator  Operator alias
-     *
-     * @return array
      */
-    private function getOperator($operator)
+    private function getOperator(string $operator): string
     {
         $mapper = array
         (

@@ -2,15 +2,12 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
-class ApiOptions extends Options
+class RegionOptions extends Options
 {
     protected function configure(): void
     {
         $this->set(self::MODE_READ, [
-            'view',
-            'addContactPerson',
-            'contactPersonData',
-            'savetemporary'
+            'language'
         ]);
     }
 }

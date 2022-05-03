@@ -13,7 +13,7 @@
     }
   ],
   "require":{
-    "php":"^7.2 || ^8.0",
+    "php":"^7.4 || ^8.0",
     "contao/core-bundle":"^4.9",
     "onoffice/sdk":"^0.2.0",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4"
