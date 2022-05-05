@@ -2,8 +2,12 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle;
 
+use Oveleon\ContaoOnofficeApiBundle\Controller\ReadController;
+
 /**
  * Fieldset class
+ *
+ * @todo as Service Container
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -18,39 +22,34 @@ class Fieldset
 
     /**
      * Object instance (Singleton)
-     * @var Fieldset
      */
-    protected static $objInstance;
+    protected static Fieldset $objInstance;
 
     /**
      * The fieldset data
      * @var array
      */
-    protected static $arrData = array();
+    protected static array $arrData = [];
 
     /**
      * Valid resource types
-     * @var array
      */
-    protected static $arrValidRecourseTypes = array(
+    protected static array $arrValidRecourseTypes = [
         'fields',
         'searchcriteriafields'
-    );
+    ];
 
     /**
      * Show Labels
-     * @var array
      */
-    public static $arrParameter = array(
+    public static array $arrParameter = [
         'labels' => true
-    );
+    ];
 
     /**
      * Instantiate the Fieldset object
-     *
-     * @return Fieldset The object instance
      */
-    public static function getInstance()
+    public static function getInstance(): Fieldset
     {
         if (static::$objInstance === null)
         {
@@ -62,13 +61,8 @@ class Fieldset
 
     /**
      * Check whether a key is set
-     *
-     * @param string $resourceType The fieldset resource type
-     * @param string $module
-     *
-     * @return boolean True if the key is set
      */
-    public static function has($resourceType, $module='')
+    public static function has(string $resourceType, string $module=''): bool
     {
         if($module)
         {
@@ -80,13 +74,8 @@ class Fieldset
 
     /**
      * Return a module entry
-     *
-     * @param string $resourceType The fieldset resource type
-     * @param null $arrModules (only $resourceType: 'fields')
-     *
-     * @return mixed The fieldset data
      */
-    public static function get($resourceType, $arrModules = null, int $format = self::FORMAT_ORIGINAL)
+    public static function get(string $resourceType, $arrModules = null, int $format = self::FORMAT_ORIGINAL)
     {
         $data = null;
         $moduleQueue = null;
@@ -144,13 +133,8 @@ class Fieldset
 
     /**
      * Format data array
-     *
-     * @param $data
-     * @param $format
-     *
-     * @return mixed
      */
-    public static function format($data, $format): ?array
+    public static function format(?array $data, int $format): ?array
     {
         if(null === $data)
         {
@@ -198,11 +182,8 @@ class Fieldset
 
     /**
      * Add and restructure a fieldset entry from api response
-     *
-     * @param string $resourceType The fieldset resource type
-     * @param mixed  $varValue The data to be set
      */
-    public static function set($resourceType, $varValue)
+    public static function set(string $resourceType, $varValue)
     {
         if(!$varValue || !static::valid($resourceType))
         {
@@ -235,7 +216,7 @@ class Fieldset
      * @param string $resourceType The fieldset resource type
      * @param string $module
      */
-    public static function remove($resourceType, $module='')
+    public static function remove(string $resourceType, string $module='')
     {
         if($module)
         {
@@ -247,42 +228,37 @@ class Fieldset
 
     /**
      * Check is resourceType valid
-     *
-     * @param string $resourceType The fieldset resource type
-     *
-     * @return bool
      */
-    private static function valid($resourceType)
+    private static function valid(string $resourceType): bool
     {
         return in_array($resourceType, static::$arrValidRecourseTypes);
     }
 
     /**
      * Call fieldset
-     *
-     * @param $resourceType
-     * @param $arrModules
-     *
-     * @return array
      */
-    private static function call($resourceType, $arrModules=null)
+    private static function call(string $resourceType, $arrModules=null): ?array
     {
-        $controller = new OnOfficeRead();
+        $controller = new ReadController();
+        $parameters = [];
 
         if(is_array(static::$arrParameter))
         {
-            foreach (static::$arrParameter as $k=>$v)
-            {
-                $_GET[ $k ] = $v;
-            }
+            $parameters = static::$arrParameter;
         }
 
         if($arrModules !== null)
         {
-            $_GET['modules'] = $arrModules;
+            $parameters['modules'] = $arrModules;
         }
 
-        $data = $controller->run($resourceType, null, null, array(), true);
+        $data = $controller->run(
+            $resourceType,
+            null,
+            null,
+            $parameters,
+            true
+        );
 
         if(!$data['status']['errorcode'])
         {

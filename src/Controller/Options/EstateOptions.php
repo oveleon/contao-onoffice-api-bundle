@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller\Options;
 
 final class EstateOptions extends Options
 {
@@ -19,6 +19,10 @@ final class EstateOptions extends Options
             'addMainLangId',
             'georangesearch',
             'addMobileUrl'
+        ]);
+
+        $this->set(Options::MODE_EDIT, [
+            'estatelanguage'
         ]);
     }
 

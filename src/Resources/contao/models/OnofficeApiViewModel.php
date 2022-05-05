@@ -60,6 +60,7 @@ namespace Oveleon\ContaoOnofficeApiBundle;
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByType($val, array $opt=array())
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByTitle($val, array $opt=array())
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByAlias($val, array $opt=array())
+ * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByIdOrAlias($val, array $opt=array())
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByData($val, array $opt=array())
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByCategories($val, array $opt=array())
  * @method static \Model\Collection|OnofficeApiViewModel[]|OnofficeApiViewModel|null findByRecordids($val, array $opt=array())

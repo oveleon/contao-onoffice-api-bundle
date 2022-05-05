@@ -1,0 +1,3 @@
+onoffice_api:
+    resource: '@ContaoOnofficeApiBundle/Controller'
+    type: annotation

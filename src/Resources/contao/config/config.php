@@ -15,6 +15,10 @@ array_insert($GLOBALS['BE_MOD'], 1, array
         (
             'tables'      => array('tl_onoffice_api_view')
         ),
+        'onoffice_auth' => array
+        (
+            'tables'      => array('tl_onoffice_auth')
+        ),
         'onoffice_settings' => array
         (
             'tables'      => array('tl_onoffice_settings')
@@ -23,14 +27,15 @@ array_insert($GLOBALS['BE_MOD'], 1, array
 ));
 
 // Models
-$GLOBALS['TL_MODELS']['tl_onoffice_api_view'] = '\\Oveleon\\ContaoOnofficeApiBundle\\OnofficeApiViewModel';
+$GLOBALS['TL_MODELS']['tl_onoffice_api_view'] = 'Oveleon\ContaoOnofficeApiBundle\OnofficeApiViewModel';
+$GLOBALS['TL_MODELS']['tl_onoffice_auth'] = 'Oveleon\ContaoOnofficeApiBundle\OnofficeAuthModel';
 
 // Purge jobs
 array_insert($GLOBALS['TL_PURGE']['folders'], 1, array
 (
     'estatepictures' => array
     (
-        'callback' => array('\\Oveleon\\ContaoOnofficeApiBundle\\OnOfficeAutomator', 'purgeEstatePictureCache'),
+        'callback' => array('Oveleon\ContaoOnofficeApiBundle\OnOfficeAutomator', 'purgeEstatePictureCache'),
         'affected' => array('assets/estatepictures')
     )
 ));

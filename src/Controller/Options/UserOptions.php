@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller\Options;
 
 final class UserOptions extends Options
 {

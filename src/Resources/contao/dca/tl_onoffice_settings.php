@@ -45,14 +45,3 @@ $GLOBALS['TL_DCA']['tl_onoffice_settings'] = array
 		)
 	)
 );
-
-/**
- * Provide miscellaneous methods that are used by the data configuration array.
- *
- * @author Daniele Sciannimanica <daniele@oveleon.de>
- */
-class tl_onoffice_settings extends Backend
-{
-
-
-}

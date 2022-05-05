@@ -2,76 +2,115 @@
 
 namespace Oveleon\ContaoOnofficeApiBundle\Controller;
 
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeEdit;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeRead;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeUpload;
-use Oveleon\ContaoOnofficeApiBundle\OnOfficeCreate;
-
+use Oveleon\ContaoOnofficeApiBundle\Authenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Handles the onOffice api routes.
+ * Handles the onOffice api routes, authentication and switch between versions.
  *
  * @author Fabian Ekert <fabian@oveleon.de>
  * @author Daniele Sciannimanica <daniele@oveleon.de>
+ *
+ * @Route(defaults={"_scope" = "frontend", "_token_check" = false})
  */
 class OnOfficeController extends AbstractController
 {
     /**
-     * Runs the command scheduler. (READ)
+     * Read Controller
      *
-     * @return JsonResponse
+     * @Route(
+     *     "/api/onoffice/v{version}/{module}/{id}",
+     *     name="onoffice_read",
+     *     defaults={"id" = null},
+     *     methods={"GET"}
+     * )
      */
-    public function readAction($version, $module, $id)
+    public function read(int $version, string $module, ?int $id): JsonResponse
     {
         $this->container->get('contao.framework')->initialize();
 
-        $controller = new OnOfficeRead();
+        if(!(new Authenticator())->isGranted())
+        {
+            return new JsonResponse([
+                'errorcode' => 'NOT_AUTHENTICATED',
+                'message' => 'An valid API key is required'
+            ]);
+        }
 
-        return $controller->run($module, $id);
+        return (new ReadController())->run($module, $id);
     }
 
     /**
-     * Runs the command scheduler. (EDIT)
+     * Edit Controller
      *
-     * @return JsonResponse
+     * @Route(
+     *     "/api/onoffice/v{version}/{module}/{id}/edit",
+     *     name="onoffice_edit",
+     *     methods={"POST"}
+     * )
      */
-    public function editAction($version, $module, $id)
+    public function edit(int $version, string $module, int $id): JsonResponse
     {
         $this->container->get('contao.framework')->initialize();
 
-        $controller = new OnOfficeEdit();
+        if(!(new Authenticator())->isGranted())
+        {
+            return new JsonResponse([
+                'errorcode' => 'NOT_AUTHENTICATED',
+                'message' => 'An valid API key is required'
+            ]);
+        }
 
-        return $controller->run($module, $id);
+        return (new EditController())->run($module, $id);
     }
 
     /**
-     * Runs the command scheduler. (UPLOAD)
+     * Upload Controller
      *
-     * @return JsonResponse
+     * @Route(
+     *     "/api/onoffice/v{version}/{module}/{id}/upload",
+     *     name="onoffice_upload",
+     *     methods={"POST"}
+     * )
      */
-    public function uploadAction($version, $module, $id)
+    public function upload(int $version, string $module, int $id): JsonResponse
     {
         $this->container->get('contao.framework')->initialize();
 
-        $controller = new OnOfficeUpload();
+        if(!(new Authenticator())->isGranted())
+        {
+            return new JsonResponse([
+                'errorcode' => 'NOT_AUTHENTICATED',
+                'message' => 'An valid API key is required'
+            ]);
+        }
 
-        return $controller->run($module, $id);
+        return (new UploadController())->run($module, $id);
     }
 
     /**
-     * Runs the command scheduler. (CREATE)
+     * Create Controller
      *
-     * @return JsonResponse
+     * @Route(
+     *     "/api/onoffice/v{version}/{module}/create",
+     *     name="onoffice_create",
+     *     methods={"POST"}
+     * )
      */
-    public function createAction($version, $module)
+    public function create(int $version, string $module): JsonResponse
     {
         $this->container->get('contao.framework')->initialize();
 
-        $controller = new OnOfficeCreate();
+        if(!(new Authenticator())->isGranted())
+        {
+            return new JsonResponse([
+                'errorcode' => 'NOT_AUTHENTICATED',
+                'message' => 'An valid API key is required'
+            ]);
+        }
 
-        return $controller->run($module);
+        return (new CreateController())->run($module);
     }
 }

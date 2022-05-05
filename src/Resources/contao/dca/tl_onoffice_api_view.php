@@ -5,6 +5,8 @@
  * (c) https://www.oveleon.de/
  */
 
+use Oveleon\ContaoOnofficeApiBundle\Fieldset;
+
 $GLOBALS['TL_DCA']['tl_onoffice_api_view'] = array
 (
 
@@ -626,13 +628,11 @@ class tl_onoffice_api_view extends Backend
      */
     public function getModuleFields($dc)
     {
-        $controller = new \Oveleon\ContaoOnofficeApiBundle\OnOfficeRead();
+        $entityDetails = Fieldset::get('fields', [$dc->activeRecord->type], Fieldset::FORMAT_ORIGINAL);
 
-        $entityDetails = $controller->run('fields', $dc->activeRecord->type, null, array('labels'=>true),true);
+        $fields = [];
 
-        $fields = array();
-
-        foreach ($entityDetails['data']['records'][0]['elements'] as $field => $value)
+        foreach ($entityDetails[$dc->activeRecord->type]['elements'] as $field => $value)
         {
             if ($field === 'label')
             {

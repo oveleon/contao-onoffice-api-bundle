@@ -1,9 +1,26 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller;
 
+use Contao\System;
 use onOffice\SDK\onOfficeSDK;
-use Contao\MemberGroupModel;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\AddressOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\AgentsLogOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\ApiOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\EstateOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\EstatePictureOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\FieldOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\Options;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\QualifiedSuitorOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\RegionOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\SearchAddressOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\SearchCriteriaOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\SearchEstateOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\SearchSearchCriteriaOptions;
+use Oveleon\ContaoOnofficeApiBundle\Controller\Options\UserOptions;
+use Oveleon\ContaoOnofficeApiBundle\Filter;
+use Oveleon\ContaoOnofficeApiBundle\OnOfficeConstants;
+use Oveleon\ContaoOnofficeApiBundle\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -12,34 +29,26 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @author Fabian Ekert <fabian@oveleon.de>
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class OnOfficeRead extends OnOfficeHandler
+class ReadController extends AbstractOnOfficeController
 {
     /**
-     * Run the controller
-     *
-     * @param String  $module           Plural name of onOffice module
-     * @param int|null $id              Id of onOffice module or resource id
-     * @param int|null $view            Id of onOffice api view
-     * @param array $arrDefaultParam    Default params
-     * @param boolean $asArray          Return as array flag
-     *
-     * @return JsonResponse|array
+     * Controller entry
      */
-    public function run(string $module, ?int $id=null, ?int $view=null, array $arrDefaultParam=[], bool $asArray=false)
+    public function run(string $module, $id=null, ?int $view=null, array $arrDefaultParam=[], bool $asArray=false)
     {
         $apiOptions = new ApiOptions(Options::MODE_READ);
 
         // Cleanup of parameters for API Options
-        $arrDefaultParam = $apiOptions->validate($arrDefaultParam, true);
+        $apiParameter = $apiOptions->validate($arrDefaultParam, true);
 
         // Extend view parameters
-        if ($apiOptions->isValid('view'))
+        if ($apiOptions->isValid('view') || null !== $view)
         {
-            $arrDefaultParam = $this->getViewParameters($arrDefaultParam['view'], $arrDefaultParam);
-        }
-        elseif (null !== $view)
-        {
-            $arrDefaultParam = $this->getViewParameters($view, $arrDefaultParam);
+            $arrDefaultParam = (new View())
+                ->getParametersByIdOrAlias(
+                    $apiParameter['view'] ?? $view,
+                    $arrDefaultParam
+                );
         }
 
         switch ($module)
@@ -66,8 +75,7 @@ class OnOfficeRead extends OnOfficeHandler
                     $estateParameter['data'] = ['Id'];
                 }
 
-                // ToDo: ?
-                $this->setFilterIdByUser($estateParameter);
+                Filter::setFilterIdByUser($estateParameter);
 
                 $data = $this->call(
                     onOfficeSDK::ACTION_ID_READ,
@@ -162,9 +170,38 @@ class OnOfficeRead extends OnOfficeHandler
                 );
 
                 // Store images temporary
-                if ($apiOptions->isValid('savetemporary'))
+                if ($apiOptions->isValid('savetemporary') && $this->responseHasRecords($data))
                 {
-                    $this->cacheEstatePictures($data);
+                    // Cache estate pictures
+                    foreach ($data['data']['records'] as &$record)
+                    {
+                        // ToDo: Rewrite (e.g. new Contao\File())
+                        $fileName = $record['elements'][0]['originalname'];
+                        $projectDir = System::getContainer()->getParameter('kernel.project_dir');
+                        $targetDir = '/assets/estatepictures';
+                        $fullTargetDir = $projectDir . $targetDir;
+                        $fullPath = $fullTargetDir . '/' . $fileName;
+                        $filePath = $targetDir . '/' . $fileName;
+
+                        // Create folder if not exist
+                        if (!is_dir($fullTargetDir))
+                        {
+                            mkdir($fullTargetDir);
+                        }
+
+                        file_put_contents($fullPath, file_get_contents($record['elements'][0]['url']));
+
+                        $record['elements'][0]['temporarypicture']['path'] = $filePath;
+
+                        $imageSize = getimagesize($fullPath);
+
+                        if (is_array($imageSize))
+                        {
+                            $record['elements'][0]['temporarypicture']['width'] = $imageSize[0];
+                            $record['elements'][0]['temporarypicture']['height'] = $imageSize[1];
+                        }
+                    }
+
                 }
                 break;
             case OnOfficeConstants::READ_ADDRESSES:
@@ -186,8 +223,7 @@ class OnOfficeRead extends OnOfficeHandler
                     $addressParameter['recordids'] = [$id];
                 }
 
-                // ToDo: ?
-                $this->setFilterIdByUser($addressParameter);
+                Filter::setFilterIdByUser($addressParameter);
 
                 $data = $this->call(
                     onOfficeSDK::ACTION_ID_READ,
@@ -287,7 +323,7 @@ class OnOfficeRead extends OnOfficeHandler
                 );
                 break;
             case OnOfficeConstants::READ_REGIONS:
-                $regionOptions = new QualifiedSuitorOptions(Options::MODE_READ);
+                $regionOptions = new RegionOptions(Options::MODE_READ);
 
                 // Cleanup of parameters for region Options
                 $regionParameter = $regionOptions->validate($arrDefaultParam, true);
@@ -344,234 +380,5 @@ class OnOfficeRead extends OnOfficeHandler
         }
 
         return new JsonResponse($response);
-    }
-
-    /**
-     * Set filter-id by user
-     */
-    private function setFilterIdByUser(array &$param)
-    {
-        $objMemberGroup = null;
-
-        if (array_key_exists('filterid', $param) && $param['filterid'] !== 0 && $param['filterid'] !== null)
-        {
-            return;
-        }
-
-        if (array_key_exists('onOfficeBranchGroup', $_SESSION))
-        {
-            $objMemberGroup = MemberGroupModel::findByPk($_SESSION['onOfficeBranchGroup']);
-            unset($_SESSION['onOfficeBranchGroup']);
-        }
-        elseif($this->User->onOfficeBranchGroup)
-        {
-            $objMemberGroup = MemberGroupModel::findByPk($this->User->onOfficeBranchGroup);
-        }
-
-        if ($objMemberGroup === null || $objMemberGroup->filterid === 0)
-        {
-            return;
-        }
-
-        $param['filterid'] = $objMemberGroup->filterid;
-    }
-
-    /**
-     * Return parameters by view alias from database
-     *
-     * @param string $view   Alias of the view
-     * @param array  $param  Default parameters
-     *
-     * @return array
-     */
-    private function getViewParameters($view, $param=[])
-    {
-        if (is_numeric($view))
-        {
-            $objApiView = $this->Database->prepare("SELECT * FROM tl_onoffice_api_view WHERE id=? AND published=1")
-                ->limit(1)
-                ->execute($view);
-        }
-        else
-        {
-            $objApiView = $this->Database->prepare("SELECT * FROM tl_onoffice_api_view WHERE alias=? AND published=1")
-                ->limit(1)
-                ->execute($view);
-        }
-
-        if ($objApiView->numRows === 0)
-        {
-            return array();
-        }
-
-        $this->loadDataContainer('tl_onoffice_api_view');
-
-        $skipFields = array('id', 'tstamp', 'type', 'title', 'alias', 'published', 'protected', 'groups', 'onOfficeShopTvView');
-
-        // Skip given parameters
-        foreach ($param as $field => $value)
-        {
-            if (!in_array($field, $skipFields))
-            {
-                $skipFields[] = $field;
-            }
-        }
-
-        $arrApiView = $objApiView->fetchAssoc();
-
-        foreach ($arrApiView as $field => $value)
-        {
-            if (in_array($field, $skipFields))
-            {
-                continue;
-            }
-
-            switch ($GLOBALS['TL_DCA']['tl_onoffice_api_view']['fields'][$field]['inputType'])
-            {
-                case 'text':
-                    if ($value)
-                    {
-                        $param[$field] = $value;
-                    }
-                    break;
-                case 'select':
-                    if ($value !== '')
-                    {
-                        $param[$field] = $value;
-                    }
-                    break;
-                case 'checkbox':
-                    if ($value !== '')
-                    {
-                        $param[$field] = true;
-                    }
-                    break;
-                case 'checkboxWizard':
-                    if (!is_null($value))
-                    {
-                        $param[$field] = unserialize($value);
-                    }
-                    break;
-                case 'multiColumnWizard':
-                    if (is_null($value))
-                    {
-                        continue;
-                    }
-
-                    switch ($field) {
-                        case 'filter':
-                            $arrFilter = unserialize($value);
-
-                            foreach ($arrFilter as $index => $filter)
-                            {
-                                if ($filter['field'] !== '' && $filter['op'] !== '' && $filter['val'] !== '')
-                                {
-                                    $op = $this->getOperator($filter['op']);
-                                    $val = $filter['val'];
-
-                                    if ($filter['op'] === 'in' || $filter['op'] === 'not_in')
-                                    {
-                                        $val = explode(',', $val);
-                                    }
-
-                                    $param[$field][$filter['field']][$index]['op']  = $op;
-                                    $param[$field][$filter['field']][$index]['val'] = $val;
-                                }
-                            }
-                            break;
-                        case 'sortby':
-                            $arrSortBy = unserialize($value);
-
-                            foreach ($arrSortBy as $item)
-                            {
-                                if ($item['field'] !== '' && $item['sorting'] !== '')
-                                {
-                                    $param[$field][$item['field']] = $item['sorting'];
-                                }
-                            }
-                            break;
-                        case 'recordids':
-                        case 'estateids':
-                            $arrIds = unserialize($value);
-
-                            foreach ($arrIds as $item)
-                            {
-                                if ($item['id'] !== '')
-                                {
-                                    $param[$field][] = $item['id'];
-                                }
-                            }
-                            break;
-                    }
-                    break;
-            }
-        }
-
-        return $param;
-    }
-
-    /**
-     * Cache estate pictures on the file system
-     *
-     * @param array $data  Response data of file records
-     */
-    private function cacheEstatePictures(&$data)
-    {
-        if (!is_array($data['data']['records']))
-        {
-            return;
-        }
-
-        foreach ($data['data']['records'] as &$record)
-        {
-            $fileName = $record['elements'][0]['originalname'];
-            $projectDir = \System::getContainer()->getParameter('kernel.project_dir');
-            $targetDir = '/assets/estatepictures';
-            $fullTargetDir = $projectDir . $targetDir;
-            $fullPath = $fullTargetDir . '/' . $fileName;
-            $filePath = $targetDir . '/' . $fileName;
-
-            // Create folder if not exist
-            if (!is_dir($fullTargetDir))
-            {
-                mkdir($fullTargetDir);
-            }
-
-            file_put_contents($fullPath, file_get_contents($record['elements'][0]['url']));
-
-            $record['elements'][0]['temporarypicture']['path'] = $filePath;
-
-            $imageSize = getimagesize($fullPath);
-
-            if (is_array($imageSize))
-            {
-                $record['elements'][0]['temporarypicture']['width'] = $imageSize[0];
-                $record['elements'][0]['temporarypicture']['height'] = $imageSize[1];
-            }
-        }
-    }
-
-    /**
-     * Return actual operator by an operator alias
-     */
-    private function getOperator(string $operator): string
-    {
-        $mapper = array
-        (
-            'equal' => '=',
-            'greater' => '>',
-            'less' => '<',
-            'greater_equal' => '>=',
-            'less_equal' => '<=',
-            'not_equal' => '!=',
-            'compare' => '<>',
-            'between' => 'between',
-            'like' => 'like',
-            'not_like' => 'not like',
-            'in' => 'in',
-            'not_in' => 'not in',
-        );
-
-        return $mapper[$operator];
     }
 }

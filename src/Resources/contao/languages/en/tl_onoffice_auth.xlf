@@ -1,0 +1,33 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="src/Resources/contao/languages/en/tl_onoffice_auth.php" source-language="en">
+    <body>
+      <trans-unit id="tl_onoffice_auth.restrict_legend">
+        <source>Restrict key</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.key.0">
+        <source>API-Key</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.key.1">
+        <source>Define an API key here, which must be specified when the API is accessed.</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.restrictIp.0">
+        <source>Restrict IP addresses</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.restrictIp.1">
+        <source>Restrict access to specific IP addresses</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.restrictHost.0">
+        <source>Restrict host</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.restrictHost.1">
+        <source>Restrict access to specific host addresses</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.allowedIps.0">
+        <source>IP addresses</source>
+      </trans-unit>
+      <trans-unit id="tl_onoffice_auth.allowedHosts.0">
+        <source>Host addresses</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

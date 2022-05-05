@@ -1,19 +1,17 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller;
 
 use onOffice\SDK\onOfficeSDK;
 
 use Contao\Config;
-use Contao\Frontend;
-use Contao\System;
 
 /**
  * onOffice controller.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-abstract class OnOfficeHandler extends Frontend
+abstract class AbstractOnOfficeController
 {
     protected $sdk = null;
     protected $token = null;
@@ -33,38 +31,12 @@ abstract class OnOfficeHandler extends Frontend
         // Create SDK
         $this->sdk = new onOfficeSDK();
         $this->sdk->setApiVersion($this->version);
-
-        // Load the user object before calling the parent constructor
-        $this->import('FrontendUser', 'User');
-
-        // Check whether a user is logged in
-        $objTokenChecker = System::getContainer()->get('contao.security.token_checker');
-
-        if(!defined('BE_USER_LOGGED_IN'))
-        {
-            \define('BE_USER_LOGGED_IN', $objTokenChecker->hasBackendUser());
-        }
-
-        if(!defined('FE_USER_LOGGED_IN'))
-        {
-            \define('FE_USER_LOGGED_IN', $objTokenChecker->hasFrontendUser());
-        }
-
-        parent::__construct();
     }
 
     /**
      * Call the onOffice api
-     *
-     * @param String     $actionId      onOffice api action
-     * @param String     $resourceType  onOffice api resource type
-     * @param array      $parameters    Array of onOffice api parameters
-     * @param int        $resourceId    Optional onOffice api resource id
-     * @param String     $identifier    Optional onOffice api identifier
-     *
-     * @return null|array
      */
-    public function call(string $actionId, string $resourceType, array $parameters, $resourceId=null, $identifier=null): ?array
+    public function call(string $actionId, string $resourceType, array $parameters, ?string $resourceId=null, ?string $identifier=null): ?array
     {
         $handle = $this->sdk->call(
             $actionId,
@@ -79,10 +51,6 @@ abstract class OnOfficeHandler extends Frontend
 
     /**
      * Request the onOffice api
-     *
-     * @param int $handleId Handle id of an onOffice call
-     *
-     * @return null|array
      */
     private function request(int $handleId): ?array
     {
@@ -92,5 +60,23 @@ abstract class OnOfficeHandler extends Frontend
         );
 
         return $this->sdk->getResponseArray($handleId);
+    }
+
+    /**
+     * Check if the response array has data
+     */
+    public function responseHasRecords(?array $arrResponse): bool
+    {
+        if(null === $arrResponse)
+        {
+            return false;
+        }
+
+        if(count(($arrResponse['data']['records'] ?? [])))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

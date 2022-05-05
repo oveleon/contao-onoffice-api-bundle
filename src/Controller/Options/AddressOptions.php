@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller\Options;
 
 final class AddressOptions extends Options
 {
@@ -18,6 +18,22 @@ final class AddressOptions extends Options
             'outputlanguage',
             'countryIsoCodeType',
             'addMobileUrl'
+        ]);
+
+        $this->set(Options::MODE_EDIT, [
+            'Benutzer',
+            'Status',
+            'newsletter_aktiv',
+            'action',
+            'phone',
+            'phone_private',
+            'phone_business',
+            'mobile',
+            'default_phone',
+            'fax',
+            'fax_private',
+            'fax_business',
+            'Land',
         ]);
 
         $this->set(Options::MODE_CREATE, [
@@ -50,6 +66,7 @@ final class AddressOptions extends Options
                 switch($mode)
                 {
                     case Options::MODE_CREATE:
+                    case Options::MODE_EDIT:
                         $this->set($mode, $data);
                         break;
                     default:

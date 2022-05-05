@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller;
 
 use onOffice\SDK\onOfficeSDK;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -8,20 +8,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * onOffice upload file api controller.
  *
+ * @todo Rework class
+ *
  * @author Fabian Ekert <fabian@oveleon.de>
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class OnOfficeUpload extends OnOfficeHandler
+class UploadController extends AbstractOnOfficeController
 {
     /**
-     * Run the controller
-     *
-     * @param String $module  Plural name of onOffice module
-     * @param int    $id      Id of onOffice module
-     *
-     * @return JsonResponse
+     * Controller entry
      */
-    public function run($module, $id)
+    public function run(string $module, $id)
     {
         $arrValidModules = array('estates', 'addresses', 'agentslogs');
 

@@ -13,6 +13,14 @@
         <source>Edit onOffice api views</source>
         <target>Die onOffice API-Ansichten bearbeiten</target>
       </trans-unit>
+      <trans-unit id="MOD.onoffice_auth.0">
+        <source>Authorization</source>
+        <target>Autorisierung</target>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_auth.1">
+        <source>Edit authorization</source>
+        <target>Autorisierung bearbeiten</target>
+      </trans-unit>
       <trans-unit id="MOD.onoffice_settings.0">
         <source>Settings</source>
         <target>Einstellung</target>

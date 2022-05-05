@@ -10,6 +10,12 @@
       <trans-unit id="MOD.onoffice_api_view.1">
         <source>Edit onOffice api views</source>
       </trans-unit>
+      <trans-unit id="MOD.onoffice_auth.0">
+        <source>Authorization</source>
+      </trans-unit>
+      <trans-unit id="MOD.onoffice_auth.1">
+        <source>Edit authorization</source>
+      </trans-unit>
       <trans-unit id="MOD.onoffice_settings.0">
         <source>Settings</source>
       </trans-unit>

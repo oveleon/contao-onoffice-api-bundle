@@ -6,9 +6,10 @@
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
 
-namespace Oveleon\ContaoOnofficeApiBundle;
+namespace Oveleon\ContaoOnofficeApiBundle\Controller\Options;
 
 use Contao\System;
+use Oveleon\ContaoOnofficeApiBundle\Fieldset;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -39,6 +40,8 @@ abstract class Options implements OptionsInterface
     const MODE_EDIT = 1;
     const MODE_CREATE = 2;
     const MODE_UPLOAD = 3;
+    const MODE_DELETE = 4;
+    const MODE_PREPARE = 5;
 
     /**
      * Module name
@@ -60,7 +63,7 @@ abstract class Options implements OptionsInterface
     /**
      * Validated data
      */
-    private ?array $validated = null;
+    protected ?array $validated = null;
 
     /**
      * Modes callback
