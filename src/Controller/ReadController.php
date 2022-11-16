@@ -34,7 +34,7 @@ class ReadController extends AbstractOnOfficeController
     /**
      * Controller entry
      */
-    public function run(string $module, $id=null, ?int $view=null, array $arrDefaultParam=[], bool $asArray=false)
+    public function run(string $module, $id=null, ?int $view=null, array $arrDefaultParam=[], bool $asArray=false, bool $blnAddressId=false)
     {
         $apiOptions = new ApiOptions(Options::MODE_READ);
 
@@ -265,6 +265,16 @@ class ReadController extends AbstractOnOfficeController
                 if(!$userOptions->isValid('data'))
                 {
                     $userParameter['data'] = ['Nachname'];
+                }
+                
+                // Get addressId
+                if ($blnAddressId)
+                {
+                    $userParameter['data'] = [
+                        'adrId:adressen.ID',
+                        'Name',
+                        'Kuerzel'
+                    ];
                 }
 
                 $data = $this->call(
