@@ -52,14 +52,24 @@ class CreateController extends AbstractOnOfficeController
                     {
                         [$contactParameter, $contactRelation] = $arrRelation;
 
-                        // Create contact person
-                        $contactPerson = $this->run(
-                            OnOfficeConstants::CREATE_ADDRESS,
-                            $contactParameter,
-                            true
-                        );
+                        // If resource id does not exist, create new contact person
+                        if (null === ($childId = $contactParameter['resourceid']))
+                        {
+                            // Create contact person
+                            $contactPerson = $this->run(
+                                OnOfficeConstants::CREATE_ADDRESS,
+                                $contactParameter,
+                                true
+                            );
 
-                        if($this->responseHasRecords($contactPerson))
+                            $childId = $contactPerson['data']['records'][0]['id'] ?? null;
+                        }
+                        else
+                        {
+                            $blnContactExists = true;
+                        }
+
+                        if ($this->responseHasRecords($contactPerson) || $blnContactExists)
                         {
                             // Create relation (estate <-> contact person)
                             $this->call(
@@ -68,7 +78,7 @@ class CreateController extends AbstractOnOfficeController
                                 (new RelationOptions(Options::MODE_CREATE))
                                     ->validate([
                                         'parentid' => [$realEstate['data']['records'][0]['id']],
-                                        'childid' => [$contactPerson['data']['records'][0]['id']],
+                                        'childid' => [$childId],
                                         'relationtype' => $contactRelation
                                     ])
                             );
