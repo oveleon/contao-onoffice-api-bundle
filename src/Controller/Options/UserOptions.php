@@ -10,7 +10,8 @@ final class UserOptions extends Options
             'filter',
             'listlimit',
             'sortby',
-            'sortorder'
+            'sortorder',
+            'data'
         ]);
     }
 

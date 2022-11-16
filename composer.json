@@ -1,22 +1,22 @@
 {
-  "name":"oveleon/contao-onoffice-api-bundle",
-  "type":"contao-bundle",
-  "description":"OnOffice API Controller for Contao.",
-  "keywords":["contao","onoffice-api-bundle"],
-  "homepage":"https://oveleon.de/",
-  "license":"MIT",
-  "authors":[
+  "name": "oveleon/contao-onoffice-api-bundle",
+  "type": "contao-bundle",
+  "description": "OnOffice API Controller for Contao.",
+  "keywords": ["contao","onoffice-api-bundle"],
+  "homepage": "https://oveleon.de/",
+  "license": "MIT",
+  "authors": [
     {
-      "name":"Oveleon",
-      "homepage":"https://oveleon.de/",
-      "role":"Developer"
+      "name": "Oveleon",
+      "homepage": "https://oveleon.de/",
+      "role": "Developer"
     }
   ],
-  "require":{
-    "php":"^7.4 || ^8.0",
-    "contao/core-bundle":"^4.9",
-    "onoffice/sdk":"^0.2.0",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.4"
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "contao/core-bundle": "^4.9",
+    "onoffice/sdk": "^0.2.0",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.5"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"
@@ -26,7 +26,7 @@
     "contao/core-bundle": "4.4.1",
     "contao/manager-plugin": "<2.0 || >=3.0"
   },
-  "autoload":{
+  "autoload": {
     "psr-4": {
       "Oveleon\\ContaoOnofficeApiBundle\\": "src/"
     },
@@ -40,9 +40,9 @@
       "src/Resources/contao/templates/"
     ]
   },
-  "extra":{
+  "extra": {
     "branch-alias": {
-      "dev-master": "2.0.x-dev"
+      "dev-master": "3.0.x-dev"
     },
     "contao-manager-plugin": "Oveleon\\ContaoOnofficeApiBundle\\ContaoManager\\Plugin"
   }

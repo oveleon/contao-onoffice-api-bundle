@@ -28,7 +28,10 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     {
         return [
             BundleConfig::create(ContaoOnofficeApiBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class, RegionEntity::class])
+                ->setLoadAfter([
+                    ContaoCoreBundle::class,
+                    RegionEntity::class
+                ])
                 ->setReplace(['contao-onoffice-api-bundle']),
         ];
     }
